@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
-import 'package:instagram/screens/feed_screen.dart';
+import 'package:instagram/screens/login_screen.dart';
+import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/web_screen_layout.dart';
@@ -16,8 +17,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home:FeedScreen(),
-      );
+      /* home: ResponsiveLayout(
+        mobileScreenLayout: MobileScreenLayout(),
+        webScreenLayout: WebScreenLayout(),
+      ),*/
+
+      //home: SignupScreen(),
+      home: LoginScreen(),
+    );
   }
 }
-
