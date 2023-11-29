@@ -86,7 +86,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     color: blueColor),
-                child: const Text('Log in'),
+                child: const Text('Sign Up'),
               ),
             ),
             const SizedBox(
@@ -101,14 +101,14 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: const Text("Don't have an account?"),
+                  child: const Text("Already Have an Account"),
                 ),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text(
-                      "  Sign up",
+                      "  Log in",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
