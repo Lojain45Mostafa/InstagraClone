@@ -101,7 +101,7 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: const Text("Already Have an Account"),
+                  child: const Text("Already Have an Account?"),
                 ),
                 GestureDetector(
                   onTap: () {},
