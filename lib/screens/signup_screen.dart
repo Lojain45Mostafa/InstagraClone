@@ -46,6 +46,27 @@ class _SignupScreenState extends State<SignupScreen> {
               height: 64,
             ),
             const SizedBox(height: 64),
+            // cicular widget to accept and show our selected file
+            const Stack(
+              children: [
+                const CircleAvatar(
+                  radius: 64,
+                  backgroundImage: NetworkImage(
+                      'https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                ),
+                // Positioned(
+                //   bottom: -10,
+                //   left: 80,
+                //   child: IconButton(
+                //     onPressed: () {},
+                //     icon: const Icon(
+                //       Icons.add_a_photo,
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+            const SizedBox(height: 24),
             //textfield for username
             TextFieldInput(
               textEditingController: _usernameController,
