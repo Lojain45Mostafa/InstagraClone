@@ -46,6 +46,27 @@ class _SignupScreenState extends State<SignupScreen> {
               height: 64,
             ),
             const SizedBox(height: 64),
+            // cicular widget to accept and show our selected file
+            const Stack(
+              children: [
+                const CircleAvatar(
+                  radius: 64,
+                  backgroundImage: NetworkImage(
+                      'https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                ),
+                // Positioned(
+                //   bottom: -10,
+                //   left: 80,
+                //   child: IconButton(
+                //     onPressed: () {},
+                //     icon: const Icon(
+                //       Icons.add_a_photo,
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+            const SizedBox(height: 24),
             //textfield for username
             TextFieldInput(
               textEditingController: _usernameController,
@@ -86,7 +107,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     color: blueColor),
-                child: const Text('Log in'),
+                child: const Text('Sign Up'),
               ),
             ),
             const SizedBox(
@@ -101,14 +122,22 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
+<<<<<<< HEAD
                   child: const Text("Already have an Account?"),
+=======
+                  child: const Text("Already Have an Account?"),
+>>>>>>> 31d28226c7724a935c379b2cf98d969dd2e061ce
                 ),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text(
+<<<<<<< HEAD
                       "  Login",
+=======
+                      "  Log in",
+>>>>>>> 31d28226c7724a935c379b2cf98d969dd2e061ce
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
