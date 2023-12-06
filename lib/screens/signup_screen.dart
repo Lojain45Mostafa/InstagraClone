@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/widgets/text_field_input.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -29,13 +29,13 @@ class _SignupScreenState extends State<SignupScreen> {
     _bioController.dispose();
   }
 
-  void sendData() {
-    final url = Uri.https(
-        'instagramclone-73f36-default-rtdb.firebaseio.com', 'users.json');
-    http.post(url,
-        headers: {"Content-Type": "application/json"},
-        body: json.encode({"username": "log", "email": "lojain@gmail.com"}));
-  }
+  // void sendData() {
+  //   final url = Uri.https(
+  //       'instagramclone-73f36-default-rtdb.firebaseio.com', 'users.json');
+  //   http.post(url,
+  //       headers: {"Content-Type": "application/json"},
+  //       body: json.encode({"username": "log", "email": "lojain@gmail.com"}));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             const SizedBox(height: 24),
             InkWell(
-              onTap: sendData,
+              // onTap: sendData,
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.center,
