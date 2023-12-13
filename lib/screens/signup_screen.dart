@@ -1,7 +1,11 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/widgets/text_field_input.dart';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -24,6 +28,14 @@ class _SignupScreenState extends State<SignupScreen> {
     _usernameController.dispose();
     _bioController.dispose();
   }
+
+  // void sendData() {
+  //   final url = Uri.https(
+  //       'instagramclone-73f36-default-rtdb.firebaseio.com', 'users.json');
+  //   http.post(url,
+  //       headers: {"Content-Type": "application/json"},
+  //       body: json.encode({"username": "log", "email": "lojain@gmail.com"}));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             const SizedBox(height: 24),
             InkWell(
+              // onTap: sendData,
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.center,
@@ -110,6 +123,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: const Text('Sign Up'),
               ),
             ),
+
             const SizedBox(
               height: 12,
             ),
@@ -122,14 +136,14 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: const Text("Already Have an Account?"),
+                  child: const Text("Already have an Account?"),
                 ),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text(
-                      "  Log in",
+                      "  Login",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
