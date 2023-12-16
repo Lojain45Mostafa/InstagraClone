@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 import 'dart:convert';
+=======
+>>>>>>> 052c88e60d63c206e7d88e217d4f30aab143c6b7
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/widgets/text_field_input.dart';
+<<<<<<< HEAD
 import 'package:image_picker/image_picker.dart';
 import 'dart:io'; // bast5demha 34an a3rf ast5dem File el fel image picker aslun el import da byst5dem 34an el I/O operation w menhom el files
+=======
+>>>>>>> 052c88e60d63c206e7d88e217d4f30aab143c6b7
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -51,6 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _bioController.dispose();
   }
 
+<<<<<<< HEAD
   bool containsUpperCase(String value) {
     return value.contains(RegExp(r'[A-Z]'));
   }
@@ -59,6 +66,8 @@ class _SignupScreenState extends State<SignupScreen> {
     return value.contains(RegExp(r'[a-z]')); // Regular Expression
   }
 
+=======
+>>>>>>> 052c88e60d63c206e7d88e217d4f30aab143c6b7
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   flex: 2,
                   child: Container(),
                 ),
+<<<<<<< HEAD
                 SvgPicture.asset(
                   'assets/ic_instagram.svg',
                   color: Colors.white, // Adjust the color
@@ -129,6 +139,85 @@ class _SignupScreenState extends State<SignupScreen> {
                       borderSide: BorderSide.none, // Remove the border
                       borderRadius:
                           BorderRadius.circular(8), // Set the border radius
+=======
+                // Positioned(
+                //   bottom: -10,
+                //   left: 80,
+                //   child: IconButton(
+                //     onPressed: () {},
+                //     icon: const Icon(
+                //       Icons.add_a_photo,
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            //textfield for username
+            TextFieldInput(
+              textEditingController: _usernameController,
+              hintText: "Enter your username",
+              textInputType: TextInputType.text,
+            ),
+            const SizedBox(height: 24),
+            //textfield for email
+            TextFieldInput(
+                textEditingController: _emailController,
+                hintText: "Enter your Email",
+                textInputType: TextInputType.emailAddress),
+            const SizedBox(height: 24),
+            //textfield for password
+            TextFieldInput(
+              textEditingController: _passController,
+              hintText: "Enter your password",
+              textInputType: TextInputType.text,
+              isPass: true,
+            ),
+            const SizedBox(height: 24),
+            //textfield for bio
+            TextFieldInput(
+              textEditingController: _bioController,
+              hintText: "Enter your bio",
+              textInputType: TextInputType.text,
+            ),
+            const SizedBox(height: 24),
+            InkWell(
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: const ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4),
+                      ),
+                    ),
+                    color: blueColor),
+                child: const Text('Sign Up'),
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Flexible(
+              flex: 2,
+              child: Container(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const Text("Already Have an Account?"),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text(
+                      "  Log in",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+>>>>>>> 052c88e60d63c206e7d88e217d4f30aab143c6b7
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
