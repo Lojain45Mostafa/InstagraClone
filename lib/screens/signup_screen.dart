@@ -97,7 +97,8 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.only(top: 16, left: 8, right: 8, bottom: 8),
+          padding:
+              const EdgeInsets.only(top: 12, left: 12, right: 12, bottom: 8),
           width: double.infinity,
           child: Form(
             key: _formKey,
@@ -113,7 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   color: Colors.white, // Adjust the color
                   height: 64,
                 ),
-                const SizedBox(height: 64),
+                const SizedBox(height: 32),
                 Stack(
                   children: [
                     _image != null
@@ -125,7 +126,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         : const CircleAvatar(
                             radius: 64,
                             backgroundImage: NetworkImage(
-                                'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=2048x2048&w=is&k=20&c=X7M3yQkbRq7zIsY16tuaHy8Wu_oo5j-Hp8Uqe7wWxDY='),
+                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLorGAuZfVX3ZCV_Pz0QZlcOvXzPHKELhVPA&usqp=CAU',
+                            ),
                             backgroundColor: Colors.red,
                           ),
                     Positioned(
@@ -155,11 +157,11 @@ class _SignupScreenState extends State<SignupScreen> {
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none, // Remove the border
                       borderRadius:
-                          BorderRadius.circular(8), // Set the border radius
+                          BorderRadius.circular(12), // Set the border radius
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     errorStyle: TextStyle(color: Colors.red),
                   ),
@@ -184,11 +186,11 @@ class _SignupScreenState extends State<SignupScreen> {
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none, // Remove the border
                       borderRadius:
-                          BorderRadius.circular(8), // Set the border radius
+                          BorderRadius.circular(12), // Set the border radius
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     errorStyle: TextStyle(color: Colors.red),
                   ),
@@ -229,7 +231,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     decoration: const ShapeDecoration(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(4),
+                          Radius.circular(12),
                         ),
                       ),
                       color: Colors.blue, // Adjust the color
