@@ -15,6 +15,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
   final TextEditingController _descriptionController = TextEditingController();
 
+  void postImage(
+    //they are accepting arguments from here because there is a provider down
+    String uid,
+   String username,
+   String profImage,
+  ) async{
+   try{
+
+   } catch(e){
+    
+   }
+  }
   _selectImage(BuildContext context) async {
     return showDialog(
         context: context,
@@ -60,10 +72,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
         });
   }
 
+@override
+  void dispose() {
+    super.dispose();
+    _descriptionController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
 
-    ;//final User user = Provider.of<User>(context).getUser;
+    //final User user = Provider.of<User>(context).getUser;
 
     return _file == null
         ? Center(
@@ -83,7 +100,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: (){},
                     child: const Text(
                       'Post',
                       style: TextStyle(
