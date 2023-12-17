@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         : const CircleAvatar(
                             radius: 64,
                             backgroundImage: NetworkImage(
-                                'https://i.stack.imgur.com/l60Hf.png'),
+                                'https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=2048x2048&w=is&k=20&c=X7M3yQkbRq7zIsY16tuaHy8Wu_oo5j-Hp8Uqe7wWxDY='),
                             backgroundColor: Colors.red,
                           ),
                     Positioned(
