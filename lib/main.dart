@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/utils/colors.dart';
+import 'package:provider/provider.dart';
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/web_screen_layout.dart';
 import 'firebase_options.dart';
@@ -32,19 +34,25 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Instagram clone',
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: mobileBackgroundColor,
+    return MultiProvider(
+      //as our app gets bigger it's gonna use multiple providers so just wrap it with MultiProvider and it's gonna be a one time setup for us
+      providers: [
+        ChangeNotifierProvider(create:(_) => UserProvider(),),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Instagram clone',
+        theme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: mobileBackgroundColor,
+        ),
+        // home: ResponsiveLayout(
+        //   mobileScreenLayout: MobileScreenLayout(),
+        //   webScreenLayout: WebScreenLayout(),
+        // ),
+      
+        home: SignupScreen(),
+        // home: LoginScreen(),
       ),
-      // home: ResponsiveLayout(
-      //   mobileScreenLayout: MobileScreenLayout(),
-      //   webScreenLayout: WebScreenLayout(),
-      // ),
-
-      home: SignupScreen(),
-      //home: LoginScreen(),
     );
   }
 }
