@@ -22,6 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   Uint8List? _image;
+  bool _isLoading = false;
 
   // Define a global key for the form
   final _formKey = GlobalKey<FormState>();
@@ -42,6 +43,25 @@ class _SignupScreenState extends State<SignupScreen> {
     _passController.dispose();
     _usernameController.dispose();
     _bioController.dispose();
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().signUpUser(
+      email: _emailController.text,
+      username: _usernameController.text,
+      password: _passController.text,
+      bio: _bioController.text,
+      file: _image!,
+    );
+    // if string returned is sucess, user has been created
+    if (res == "success") {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   bool containsUpperCase(String value) {
@@ -183,20 +203,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 const SizedBox(height: 24),
                 InkWell(
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      // Form is valid, handle sign-up logic
-                      String res = await AuthMethods().signUpUser(
-                        email: _emailController.text,
-                        username: _usernameController.text,
-                        password: _passController.text,
-                        bio: _bioController.text,
-                        file: _image!,
-                      );
-                      print(res);
-                    }
-                  },
+                  onTap: signUpUser,
                   child: Container(
+                    child: _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: primaryColor,
+                            ),
+                          )
+                        : const Text('Sign Up'),
                     width: double.infinity,
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -208,7 +223,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       color: Colors.blue, // Adjust the color
                     ),
-                    child: const Text('Sign Up'),
+                    // child: const Text('Sign Up'),
                   ),
                 ),
                 const SizedBox(height: 12),

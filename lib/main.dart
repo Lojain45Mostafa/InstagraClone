@@ -17,17 +17,16 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyCTNFGUcZYIRFbRM26VP799afZ68SX_puA",
-        appId: "1:257455787498:web:023a6b0f1a8d7f24f2f693",
-        messagingSenderId: "257455787498",
-        projectId: "instagram-project-871da",
-        storageBucket: 'instagram-project-871da.appspot.com'
-      ),
+          apiKey: "AIzaSyCTNFGUcZYIRFbRM26VP799afZ68SX_puA",
+          appId: "1:257455787498:web:023a6b0f1a8d7f24f2f693",
+          messagingSenderId: "257455787498",
+          projectId: "instagram-project-871da",
+          storageBucket: 'instagram-project-871da.appspot.com'),
     );
   } else {
     await Firebase.initializeApp();
   }
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -39,12 +38,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: ResponsiveLayout(
-        mobileScreenLayout: MobileScreenLayout(),
-        webScreenLayout: WebScreenLayout(),
-      ),
+      // home: ResponsiveLayout(
+      //   mobileScreenLayout: MobileScreenLayout(),
+      //   webScreenLayout: WebScreenLayout(),
+      // ),
 
-      // home: SignupScreen(),
+      home: SignupScreen(),
       //home: LoginScreen(),
     );
   }
