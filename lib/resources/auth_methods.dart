@@ -17,35 +17,48 @@ class AuthMethods {
     required bio,
     required Uint8List file,
   }) async {
-    String res = "Error occured";
+    String res = "Error occurred";
 
     try {
-      if (email.isNotEmpty ||
-          username.isNotEmpty ||
-          password.isNotEmpty ||
+      if (email.isNotEmpty &&
+          username.isNotEmpty &&
+          password.isNotEmpty &&
           bio.isNotEmpty) {
-        //register user
+        // Register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
-        print(cred.user!.uid);
+          email: email,
+          password: password,
+        );
 
-        String photoUrl = await StorageMethods()
-            .uploadImageToFirebaseStorage('profilePics', file, false);
-        // add user to the database
-        await _firestore.collection('users').doc(cred.user!.uid).set({
-          'username': username,
-          'email': email,
-          'bio': bio,
-          'uid': cred.user!.uid,
-          'followers': [],
-          'followings': [],
-          'photoUrl': photoUrl,
-        });
-        res = "success";
+        if (cred.user != null) {
+          String photoUrl = await StorageMethods().uploadImageToFirebaseStorage(
+            'profilePics',
+            file,
+            false,
+          );
+
+          // Add user to the database
+          await _firestore.collection('users').doc(cred.user!.uid).set({
+            'username': username,
+            'email': email,
+            'bio': bio,
+            'uid': cred.user!.uid,
+            'followers': [],
+            'followings': [],
+            'photoUrl': photoUrl,
+          });
+
+          res = "success";
+        } else {
+          res = "User registration failed";
+        }
+      } else {
+        res = "Please enter all the fields";
       }
     } catch (err) {
       res = err.toString();
     }
+
     return res;
   }
 

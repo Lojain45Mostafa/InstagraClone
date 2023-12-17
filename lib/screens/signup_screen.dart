@@ -46,9 +46,15 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void signUpUser() async {
+    // Ensure the form is valid
+    if (_formKey.currentState?.validate() != true) {
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
+
     String res = await AuthMethods().signUpUser(
       email: _emailController.text,
       username: _usernameController.text,
@@ -56,11 +62,17 @@ class _SignupScreenState extends State<SignupScreen> {
       bio: _bioController.text,
       file: _image!,
     );
-    // if string returned is sucess, user has been created
+
+    // if string returned is success, user has been created
     if (res == "success") {
       setState(() {
         _isLoading = false;
       });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      showSnackBar(context, res);
     }
   }
 
