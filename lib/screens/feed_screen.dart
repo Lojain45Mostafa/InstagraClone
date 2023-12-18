@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/screens/chat_messages.dart';
 import 'package:instagram/utils/colors.dart';
@@ -32,7 +33,32 @@ class FeedScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const PostCard(),
+      body: StreamBuilder(
+        //using streambuilder to listen to the real time database
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        //we are not using get because this is realtime database (using snapshot) and we are not using .doc(id) cuz we want all the documents
+        builder:(context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            //checking the connection state
+            return const  Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            //counting this snapshot data and it can't be null
+            itemCount: snapshot.data!.docs.length ,
+            itemBuilder: (context,index) => PostCard(
+
+            //render data that is present in the post card
+            // we are going to grab one doc at a time cuz we are calling list view builder it will rend as the number of documents 
+            //and index will be 0 the first time, 1 the second time  and so on
+            snap:  snapshot.data!.docs[index].data(),
+            ),
+
+           
+            );
+        },
+      ),
     );
   }
 }
