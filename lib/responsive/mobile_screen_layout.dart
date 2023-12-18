@@ -17,7 +17,7 @@ class MobileScreenLayout extends StatefulWidget {
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   String Username ="";
-  
+
   //  void getUsername() async{
   //    DocumentSnapshot snap = await FirebaseFirestore.instance
   //    .collection('users')
@@ -57,7 +57,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    model.User user = Provider.of<UserProvider>(context).getUser;
+    // model.User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: PageView(
         controller: pageController,

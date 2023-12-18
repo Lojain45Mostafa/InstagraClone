@@ -13,7 +13,7 @@ const webScreenSize = 600;
 List<Widget> homeScreenItems = [
   const FeedScreen(),
   const SearchScreen(),
-  // const AddPostScreen(),
+  const AddPostScreen(),
   const Notifications(),
   const Profile(),
   const SignupScreen(),
