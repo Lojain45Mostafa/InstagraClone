@@ -1,8 +1,13 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
+import 'package:instagram/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:instagram/providers/user_provider.dart' ;
+
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -12,19 +17,40 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
+
   Uint8List? _file;
   final TextEditingController _descriptionController = TextEditingController();
+  bool _isLoading = false;
 
   void postImage(
     //they are accepting arguments from here because there is a provider down
     String uid,
    String username,
    String profImage,
-  ) async{
+  ) async {
+    setState(() {
+      _isLoading = true;
+    });
    try{
-
+      String res = await FirestoreMethods().uploadPost(
+        _descriptionController.text ,
+         _file!, uid, username,
+          profImage,
+          );
+   
+   if(res =='success') {
+     setState(() {
+      _isLoading = false;
+    });
+    showSnackBar(context, 'posted!');
+   } else {
+     setState(() {
+      _isLoading = false;
+    });
+      showSnackBar(context, res );
+   }
    } catch(e){
-    
+    showSnackBar(context, e.toString());
    }
   }
   _selectImage(BuildContext context) async {
@@ -72,6 +98,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
         });
   }
 
+
+void ClearImage(){
+  setState(() {
+    _file = null;
+  });
+}
 @override
   void dispose() {
     super.dispose();
@@ -80,8 +112,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
 
-    //final User user = Provider.of<User>(context).getUser;
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
 
+    // var user;
     return _file == null
         ? Center(
             child: IconButton(
@@ -100,7 +133,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: [
                 TextButton(
-                    onPressed: (){},
+                    onPressed: () => postImage(
+                    userProvider.getUser.uid,
+                    userProvider.getUser.username,
+                    userProvider.getUser.photoUrl,
+                      ),
                     child: const Text(
                       'Post',
                       style: TextStyle(
@@ -113,6 +150,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: [
+                _isLoading? const LinearProgressIndicator() : const Padding(padding: EdgeInsets.only(top: 0.0)),
+                const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
