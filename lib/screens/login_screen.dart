@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/resources/auth_methods.dart';
+import 'package:instagram/screens/feed_screen.dart';
+import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/utils/colors.dart';
+import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/text_field_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,12 +17,43 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passController.dispose();
+  }
+
+  void loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      String res = await AuthMethods().loginUser(
+        email: _emailController.text,
+        password: _passController.text,
+      );
+
+      if (res == "success") {
+        // Navigate to feed_screen.dart
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const FeedScreen()),
+        );
+      } else {
+        showSnackBar(context, res);
+      }
+    } catch (e) {
+      print("Login Error: $e");
+      showSnackBar(context, "An error occurred during login");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -55,18 +90,26 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 64),
             InkWell(
+              onTap: loginUser,
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4),
-                      ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(4),
                     ),
-                    color: blueColor),
-                child: const Text('Log in'),
+                  ),
+                  color: blueColor,
+                ),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : const Text('Log in'),
               ),
             ),
             const SizedBox(
@@ -84,7 +127,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text("Don't have an account?"),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignupScreen()),
+                    );
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text(
