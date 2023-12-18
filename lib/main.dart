@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
+import 'package:instagram/screens/chat_messages.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/utils/colors.dart';
@@ -37,7 +38,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       //as our app gets bigger it's gonna use multiple providers so just wrap it with MultiProvider and it's gonna be a one time setup for us
       providers: [
-        ChangeNotifierProvider(create:(_) => UserProvider(),),
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -49,9 +52,10 @@ class MyApp extends StatelessWidget {
         //   mobileScreenLayout: MobileScreenLayout(),
         //   webScreenLayout: WebScreenLayout(),
         // ),
-      
-        home: SignupScreen(),
-        // home: LoginScreen(),
+
+        // home: SignupScreen(),
+        home: LoginScreen(),
+        // home: ChatMessages(),
       ),
     );
   }
