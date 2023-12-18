@@ -8,15 +8,16 @@ import 'package:instagram/models/user.dart' as model;
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  //get user details 
-  Future<model.User> getUserDetails() async{
+  //get user details
+  Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
-     DocumentSnapshot snap = await FirebaseFirestore.instance
-     .collection('users')
-     .doc(FirebaseAuth.instance.currentUser!.uid)
-     .get();
+    DocumentSnapshot snap = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
     return model.User.fromSnap(snap);
   }
+
   //signup user
   Future<String> signUpUser({
     required username,
@@ -45,7 +46,7 @@ class AuthMethods {
             false,
           );
           //create a new user
-          model.User user = model.User (
+          model.User user = model.User(
             username: username,
             email: email,
             bio: bio,
@@ -56,8 +57,10 @@ class AuthMethods {
           );
 
           // Add user to the database
-          await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson(),);
-          //this will return map for us as an object by json 
+          await _firestore.collection('users').doc(cred.user!.uid).set(
+                user.toJson(),
+              );
+          //this will return map for us as an object by json
 
           res = "success";
         } else {
@@ -75,12 +78,12 @@ class AuthMethods {
 
   //function for login
   Future<String> loginUser({
-    required email,
-    required password,
+    required String email,
+    required String password,
   }) async {
-    String res = "Error Occured";
+    String res = "Error Occurred";
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty) {
         // logging in user with email and password
         await _auth.signInWithEmailAndPassword(
           email: email,
@@ -91,7 +94,7 @@ class AuthMethods {
         res = "Please enter all the fields";
       }
     } catch (err) {
-      return err.toString();
+      res = "Error: ${err.toString()}";
     }
     return res;
   }
