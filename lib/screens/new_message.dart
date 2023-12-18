@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram/screens/camera_test.dart';
 import 'package:instagram/utils/utils.dart';
 
 class NewMessage extends StatefulWidget {
@@ -57,6 +59,29 @@ class _NewMessageState extends State<NewMessage> {
     });
   }
 
+  // Function to open the camera when the camera icon is pressed
+  void openCamera() async {
+    // Obtain a list of the available cameras on the device.
+    final cameras = await availableCameras();
+
+    if (cameras.isEmpty) {
+      // Handle the case where no cameras are available on the device.
+      print('No cameras available on the device.');
+      return;
+    }
+
+    // Get a specific camera from the list of available cameras.
+    final firstCamera = cameras.first;
+
+    // Navigate to the TakePictureScreen with the obtained camera description.
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePictureScreen(camera: firstCamera),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +125,7 @@ class _NewMessageState extends State<NewMessage> {
                 IconButton(
                   icon: Icon(Icons.camera_alt),
                   onPressed: () {
-                    pickImage(ImageSource.camera);
+                    openCamera(); // Pass the context to the function
                   },
                 ),
               ],
