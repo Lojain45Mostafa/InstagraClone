@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/screens/comments_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/widgets/like_animation.dart';
+import 'package:instagram/providers/user_provider.dart';
+import 'package:instagram/utils/global_variables.dart';
+import 'package:instagram/models/user.dart' as model;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -19,6 +25,7 @@ class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   @override
   Widget build(BuildContext context) {
+    final model.User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
       padding: EdgeInsets.symmetric(
@@ -93,7 +100,9 @@ class _PostCardState extends State<PostCard> {
           ),
            //image section          
             GestureDetector(
-              onDoubleTap: (){
+              onDoubleTap: () async {
+               await FirestoreMethods().likePost(widget.snap['postId'].toString(),user.uid,widget.snap['likes'],
+               );
                setState(() {
                  isLikeAnimating = true;
                });
@@ -130,14 +139,24 @@ class _PostCardState extends State<PostCard> {
             ),
             // like comment section 
            Row(
-            children: [
+            children:<Widget>[
+              LikeAnimation(
+                isAnimating: widget.snap['likes'].contains(user.uid),
+                smallLike: true,
+                child:
               IconButton(
-                onPressed: (){},
-               icon: const Icon(
+                onPressed: () async {
+                await FirestoreMethods().likePost(widget.snap['postId'].toString(),user.uid,widget.snap['likes'],);
+                },
+               icon: widget.snap['likes'].contains(user.uid) ? const Icon(
                 Icons.favorite,
                 color: Colors.red,
-                ),
+                )
+                : const Icon(
+                          Icons.favorite_border,
+                        ),
                ),
+              ),
                 IconButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
@@ -179,6 +198,7 @@ class _PostCardState extends State<PostCard> {
               DefaultTextStyle(
                 style : Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w900,),
                 child : Text(
+                  //The ${} syntax is used to embed the value of widget.snap[''] into the text
                 '${widget.snap['likes'].length} likes',
                 style : Theme.of(context).textTheme.bodyMedium,
               ),
@@ -199,6 +219,7 @@ class _PostCardState extends State<PostCard> {
                     ),
                 ),
                 TextSpan(
+                  //The ${} syntax is used to embed the value of widget.snap[''] into the text
                   text:' ${widget.snap['description']}' ,
                 ),
                   ],
