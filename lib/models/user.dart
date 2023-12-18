@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User{
+class  User{
   //properties of user class
   final String email;
   final String uid;
@@ -21,6 +21,7 @@ class User{
     required this.following,
     required this.followers,
   });
+
 //function will take a document snapshot and return user model
 //we did this here once because we are gonna use it again so we don't have to do it ecerytime we will just call it
 static User fromSnap(DocumentSnapshot snap){

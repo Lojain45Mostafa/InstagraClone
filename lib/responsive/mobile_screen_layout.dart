@@ -17,12 +17,7 @@ class MobileScreenLayout extends StatefulWidget {
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   String Username ="";
-   @override
-  void initState() {
-    //we are calling this because it should run in the start of our app
-    super.initState();
-    // getUsername();
-  }
+  
   //  void getUsername() async{
   //    DocumentSnapshot snap = await FirebaseFirestore.instance
   //    .collection('users')
@@ -37,11 +32,11 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   int _page = 0;
   late PageController pageController; // for tabs animation
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   pageController = PageController();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
 
   @override
   void dispose() {
@@ -118,8 +113,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   }
 }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   // TODO: implement build
-  //   throw UnimplementedError();
-  // }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
