@@ -42,6 +42,14 @@ class FeedScreen extends StatelessWidget {
             //checking the connection state
             return const  Center(
               child: CircularProgressIndicator(),
+              //It blocks the user from interacting with the application when it is busy
+              //It is used in instances such as downloading and uploading content, fetching data from api, processing data etc
+              //A widget that shows progress along a circle
+            );
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text('No posts available'),
             );
           }
           return ListView.builder(

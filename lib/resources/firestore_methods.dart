@@ -82,4 +82,56 @@ class FirestoreMethods {
       print(e.toString());
     }
   }
+
+
+  Future<void> likePost(String postId , String uid , List likes) async{
+    try{
+         if (likes.contains(uid)) {
+        // if the likes list contains the user uid, we need to remove it
+        //that checks if we already liked the post so that we can dislike it
+        await _firestore.collection('posts').doc(postId).update({
+          //going to the specific post to update likes array
+          'likes': FieldValue.arrayRemove([uid])
+          //in this field likes remove like with this id from the array
+        });
+      }else {
+        // else we need to add uid to the likes array
+       await _firestore.collection('posts').doc(postId).update({
+          'likes': FieldValue.arrayUnion([uid])
+        });
+      }
+    }catch(e){
+      print(e.toString(),);
+    }
+  }
+Future<String> postComment(String postId,String text , String uid ,String name ,String profilePic) async{
+   String res = "Some error occurred";
+ try {
+      if (text.isNotEmpty) {
+        // if the likes list contains the user uid, we need to remove it
+        String commentId = const Uuid().v1();
+       await  _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': text,
+          'commentId': commentId,
+          'datePublished': DateTime.now(),
+        });
+        res = 'success';
+      } else {
+        res = "Please enter text";
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
 }
+
+}
+
