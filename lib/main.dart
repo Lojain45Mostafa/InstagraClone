@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/providers/user_provider.dart';
@@ -14,6 +15,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+// Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+// Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialise app based on platform- web or mobile
@@ -48,14 +57,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,
         ),
+
         // home: ResponsiveLayout(
         //   mobileScreenLayout: MobileScreenLayout(),
         //   webScreenLayout: WebScreenLayout(),
         // ),
 
         // home: SignupScreen(),
-        home: LoginScreen(),
-        // home: ChatMessages(),
+        // home: LoginScreen(),
+        home: ChatMessages(),
+        // home: LorginScreen(),
       ),
     );
   }
