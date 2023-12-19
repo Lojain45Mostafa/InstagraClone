@@ -38,9 +38,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
         collection('posts')
         .doc(widget.snap['postId'])
         .collection('comments')
-        .orderBy('datePublished' , descending: true,)
+        .orderBy('datePublished' , descending: true)
         .snapshots(),
         builder: (context, snapshot) {
+           print(snapshot);
           if(snapshot.connectionState == ConnectionState.waiting){
             //checking the connection state
             return const  Center(
@@ -53,12 +54,20 @@ class _CommentsScreenState extends State<CommentsScreen> {
           return ListView.builder(
             //counting this snapshot data and it can't be null
             itemCount: (snapshot.data! as dynamic).docs.length ,
-            itemBuilder: (context,index) => CommentCard(
-              snap : (snapshot.data! as dynamic).docs[index].data()
-              //grab them by their index 0 , 1 ,2
-            ),
-            //render data that is present in the comment card
-            // we are going to grab one doc at a time cuz we are calling list view builder it will rend as the number of documents 
+            itemBuilder: (context, index) {
+                    final dynamic document =
+                        (snapshot.data! as QuerySnapshot<Object?>).docs[index];
+
+                    // Check if the document exists and contains data
+                    if (document != null && document is Map<String, dynamic>) {
+                      return CommentCard(
+                        snap: document,
+                      );
+                    } else {
+                      // Handle if the document doesn't exist or data is null
+                      return SizedBox(); // Or any placeholder widget
+                    }
+              },
 
            
             );
