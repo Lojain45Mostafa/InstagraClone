@@ -4,12 +4,16 @@ import 'package:instagram/models/post.dart';
 import 'package:instagram/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
+
 class FirestoreMethods{
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   //upload post
   Future<String> uploadPost(
     //we will take them from user
+
+
   String description ,
   Uint8List file, 
   String uid,
@@ -46,3 +50,4 @@ class FirestoreMethods{
     return res; 
   }
 }
+
