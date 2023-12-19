@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/screens/comments_screen.dart';
 import 'package:instagram/utils/colors.dart';
+import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/like_animation.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/utils/global_variables.dart';
@@ -23,6 +24,26 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
 
   bool isLikeAnimating = false;
+  int commentLen = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getComments();
+  }
+
+  void getComments() async{
+   try{
+    QuerySnapshot snap = await FirebaseFirestore.instance.collection('posts').doc(widget.snap['postId']).collection('comments').get();
+    // query snapshot and doc snapshot are similar only that doc recieved after we put doc and query when we put get after the collection
+  commentLen = snap.docs.length;
+   } catch(e){
+    showSnackBar(context, e.toString());
+   }
+   setState(() {
+     //to see the comment length
+   });
+  }
   @override
   Widget build(BuildContext context) {
     final model.User user = Provider.of<UserProvider>(context).getUser;
@@ -160,7 +181,9 @@ class _PostCardState extends State<PostCard> {
                 IconButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context)=>CommentsScreen(),
+                    builder: (context)=>CommentsScreen(
+                      snap: widget.snap,
+                    ),
                     ),
                     ),
                icon: const Icon(
@@ -232,7 +255,7 @@ class _PostCardState extends State<PostCard> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical:4 ),
                     child: Text(
-                      'view all 20 comments',
+                      'view all $commentLen comments',
                     style: const TextStyle( 
                       fontSize: 16,
                      color: secondaryColor

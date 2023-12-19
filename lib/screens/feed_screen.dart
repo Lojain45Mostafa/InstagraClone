@@ -47,6 +47,11 @@ class FeedScreen extends StatelessWidget {
               //A widget that shows progress along a circle
             );
           }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text('No posts available'),
+            );
+          }
           return ListView.builder(
             //counting this snapshot data and it can't be null
             itemCount: snapshot.data!.docs.length ,
