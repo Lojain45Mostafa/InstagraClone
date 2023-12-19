@@ -67,6 +67,7 @@ class _PostCardState extends State<PostCard> {
                   backgroundImage: NetworkImage(
                     //getting the profile picture of whoever posted this post
                     widget.snap['profImage'].toString(),
+
                   ),
                 ),
                 Expanded(
@@ -183,6 +184,7 @@ class _PostCardState extends State<PostCard> {
                   MaterialPageRoute(
                     builder: (context)=>CommentsScreen(
                       snap: widget.snap,
+                      postId: widget.snap['postId'].toString(),
                     ),
                     ),
                     ),
