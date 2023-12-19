@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/utils/colors.dart';
+import 'package:instagram/models/notificationType.dart';
+import 'package:instagram/models/notifications.dart';
+
+import '../models/post.dart';
+import '../models/user.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({Key? key});
@@ -32,12 +37,13 @@ class _NotificationsState extends State<Notifications> {
         action: 'requested to follow',
         postText: 'Wants to follow you'),
   ];
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
         backgroundColor: mobileBackgroundColor,
       ),
       body: ListView.builder(
@@ -53,8 +59,8 @@ class _NotificationsState extends State<Notifications> {
               // Show a snackbar to indicate the item is dismissed
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Notification dismissed'),
-                  duration: Duration(seconds: 2),
+                  content: const Text('Notification dismissed'),
+                  duration: const Duration(seconds: 2),
                   action: SnackBarAction(
                     label: 'Undo',
                     onPressed: () {
@@ -74,20 +80,20 @@ class _NotificationsState extends State<Notifications> {
             background: Container(
               color: Colors.red,
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Icon(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: const Icon(
                 Icons.delete,
                 color: Colors.white,
               ),
             ),
             child: ListTile(
-              leading: CircleAvatar(
+              leading: const CircleAvatar(
                 backgroundColor: Colors.blue,
                 child: Icon(Icons.person),
               ),
               title: Text(
                 notification.username,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: buildNotificationSubtitle(notification),
               onTap: () {
