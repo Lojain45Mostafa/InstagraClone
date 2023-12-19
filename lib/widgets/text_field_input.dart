@@ -13,6 +13,7 @@ class TextFieldInput extends StatelessWidget {
     required this.hintText,
     required this.textInputType,
     this.borderRadius = 8.0,
+    required bool obscureText,
   }) : super(key: key);
 
   @override
