@@ -146,6 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   textEditingController: _usernameController,
                   hintText: "Enter your username",
                   textInputType: TextInputType.text,
+                  obscureText: false,
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
@@ -214,6 +215,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   textEditingController: _bioController,
                   hintText: "Enter your bio",
                   textInputType: TextInputType.text,
+                  obscureText: false,
                 ),
                 const SizedBox(height: 24),
                 InkWell(

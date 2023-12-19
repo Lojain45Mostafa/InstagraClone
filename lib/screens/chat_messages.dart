@@ -79,9 +79,9 @@ class _ChatMessagesState extends State<ChatMessages> {
               final messageData = loadedMessages[index].data();
               final username = messageData['username'];
               final text = messageData['text'];
-              final userImage = messageData['userImage'];
+              final photoURL = messageData['photoURL'];
 
-              return _buildChatMessage(username, text, userImage);
+              return _buildChatMessage(username, text, photoURL);
             },
           );
         },
@@ -89,7 +89,7 @@ class _ChatMessagesState extends State<ChatMessages> {
     );
   }
 
-  Widget _buildChatMessage(String username, String text, String userImage) {
+  Widget _buildChatMessage(String username, String text, String photoURL) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -97,7 +97,7 @@ class _ChatMessagesState extends State<ChatMessages> {
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundImage: NetworkImage(userImage),
+            backgroundImage: NetworkImage(photoURL),
           ),
           SizedBox(width: 8),
           Expanded(

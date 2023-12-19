@@ -1,7 +1,9 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
+import 'package:instagram/screens/chatTest_page.dart';
 import 'package:instagram/screens/chat_messages.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
@@ -14,7 +16,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+//   // Ensure that plugin services are initialized so that `availableCameras()`
+//   WidgetsFlutterBinding.ensureInitialized();
+
+// // Obtain a list of the available cameras on the device.
+//   final cameras = await availableCameras();
+
+// // Get a specific camera from the list of available cameras.
+//   final firstCamera = cameras.first;
+//   WidgetsFlutterBinding.ensureInitialized();
 
   // initialise app based on platform- web or mobile
   if (kIsWeb) {
@@ -49,14 +59,19 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: mobileBackgroundColor,
         ),
 
-        home: ResponsiveLayout(
-          mobileScreenLayout: MobileScreenLayout(),
-          webScreenLayout: WebScreenLayout(),
-        ),
-      
-        // home: SignupScreen(),
-        // home: LoginScreen(),
 
+        // home: ResponsiveLayout(
+        //   mobileScreenLayout: MobileScreenLayout(),
+        //   webScreenLayout: WebScreenLayout(),
+        // ),
+
+        // home: SignupScreen(),
+        home: LoginScreen(),
+        // home: ChatMessages(),
+        // home: const ChatTestPage(
+        //   receiverUserEmail: 'lojain22@gmail.com',
+        //   receiverUserID: 'Ge74dteyqZN1qFWyUeO8MW3KBiz1',
+        // ),
       ),
     );
   }

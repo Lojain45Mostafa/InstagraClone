@@ -1,9 +1,11 @@
 import 'dart:typed_data';
-
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram/screens/Message_bubble.dart';
+import 'package:instagram/screens/camera_test.dart';
 import 'package:instagram/utils/utils.dart';
 
 class NewMessage extends StatefulWidget {
@@ -16,11 +18,36 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   final _messageController = TextEditingController();
   Uint8List? _image;
+  List<Map<String, dynamic>> _chatMessages = [];
 
   @override
   void dispose() {
     _messageController.dispose();
     super.dispose();
+  }
+
+  Future<void> retrieveMessages() async {
+    try {
+      // Reference to the 'chat' collection in Firestore
+      CollectionReference chatCollection =
+          FirebaseFirestore.instance.collection('chat');
+
+      // Query the collection for messages, ordered by createdAt
+      QuerySnapshot querySnapshot =
+          await chatCollection.orderBy('createdAt').get();
+
+      // Extract messages from the snapshot
+      List<QueryDocumentSnapshot> messages = querySnapshot.docs;
+
+      // Update the chat messages list with the retrieved messages
+      _chatMessages = messages
+          .map((message) => message.data() as Map<String, dynamic>)
+          .toList();
+
+      print(_chatMessages.toString());
+    } catch (error) {
+      print('Error retrieving messages: $error');
+    }
   }
 
   void _submitMessage() async {
@@ -57,6 +84,29 @@ class _NewMessageState extends State<NewMessage> {
     });
   }
 
+  // Function to open the camera when the camera icon is pressed
+  void openCamera() async {
+    // Obtain a list of the available cameras on the device.
+    final cameras = await availableCameras();
+
+    if (cameras.isEmpty) {
+      // Handle the case where no cameras are available on the device.
+      print('No cameras available on the device.');
+      return;
+    }
+
+    // Get a specific camera from the list of available cameras.
+    final firstCamera = cameras.first;
+
+    // Navigate to the TakePictureScreen with the obtained camera description.
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePictureScreen(camera: firstCamera),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,10 +119,35 @@ class _NewMessageState extends State<NewMessage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: ListView(
-                children: [
-                  // Your existing chat messages or any other content here
-                ],
+              child: FutureBuilder(
+                future: retrieveMessages(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return ListView.builder(
+                      itemCount: _chatMessages.length,
+                      itemBuilder: (context, index) {
+                        final isMe = _chatMessages[index]['userId'] ==
+                            FirebaseAuth.instance.currentUser?.uid;
+
+                        if (index == 0) {
+                          return MessageBubble.first(
+                            username: _chatMessages[index]['username'],
+                            photoURL: _chatMessages[index]['userImage'],
+                            message: _chatMessages[index]['text'],
+                            isMe: isMe,
+                          );
+                        } else {
+                          return MessageBubble.next(
+                            message: _chatMessages[index]['text'],
+                            isMe: isMe,
+                          );
+                        }
+                      },
+                    );
+                  }
+                },
               ),
             ),
             SizedBox(height: 16),
@@ -100,7 +175,7 @@ class _NewMessageState extends State<NewMessage> {
                 IconButton(
                   icon: Icon(Icons.camera_alt),
                   onPressed: () {
-                    pickImage(ImageSource.camera);
+                    openCamera(); // Pass the context to the function
                   },
                 ),
               ],
