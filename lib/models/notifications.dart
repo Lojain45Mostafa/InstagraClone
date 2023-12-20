@@ -9,8 +9,10 @@ class Notifications {
       {required this.reciever,
       required this.sender,
       required this.post,
-      required this.type});
+      required this.type,
+      required this.id});
 
+  final String id;
   final User reciever;
   final User sender;
   final Post post;
@@ -64,6 +66,7 @@ class Notifications {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return Notifications(
+      id: snap.id,
       reciever: await Notifications.GetUserById(snapshot["receiverID"]),
       sender: await Notifications.GetUserById(snapshot["senderID"]),
       post: await Notifications.GetPostById(snapshot["postID"]),
@@ -76,6 +79,7 @@ class Notifications {
         "senderID": sender.uid,
         "postID": post.postId,
         "typeID": type.id,
+        "id" : id,
       };
 
       static Future<void> sendNotification({
@@ -85,22 +89,20 @@ class Notifications {
     required String typeID,
   }) async {
     // Fetch sender, receiver, post, and notification type
-    User sender = await GetUserById(senderID);
-    User receiver = await GetUserById(receiverID);
-    Post post = await GetPostById(postID);
-    NotificationType type = await GetNotificatioTypeById(typeID);
 
     // Create a new notification
-    Notifications notification = Notifications(
-      reciever: receiver,
-      sender: sender,
-      post: post,
-      type: type,
-    );
+    
 
     // Add the notification to Firestore or your preferred data store
-    await FirebaseFirestore.instance.collection('notifications').add(
-      notification.toJson(),
+    var doc = FirebaseFirestore.instance.collection('notifications').doc();
+    await doc.set(
+      {
+        "receiverID": receiverID,
+        "senderID": senderID,
+        "postID": postID,
+        "typeID": typeID,
+        "id": doc.id,
+      }
     );
 
     // You can also implement additional logic for sending push notifications, etc.

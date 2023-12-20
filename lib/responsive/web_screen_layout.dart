@@ -12,8 +12,7 @@ class WebScreenLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Scaffold(
       body: IconButton(onPressed:() async {
-      var n = Notifications.sendNotification(senderID: "Ge74dteyqZN1qFWyUeO8MW3KBiz1", receiverID: "UUnNUkznPCcNmMFLbH71v2uptpG2", postID: "99e08680-fd7a-1e08-82f4-37c53fe15271", typeID: "5ds9o3g3tG4x81i44rs7");
-       print(n.toString());
+       Notifications.sendNotification(senderID: "Ge74dteyqZN1qFWyUeO8MW3KBiz1", receiverID: "UUnNUkznPCcNmMFLbH71v2uptpG2", postID: "99e08680-fd7a-1e08-82f4-37c53fe15271", typeID: "5ds9o3g3tG4x81i44rs7");
       }, icon: Icon(Icons.abc))
     );
   }
