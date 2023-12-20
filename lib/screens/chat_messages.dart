@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/screens/new_message.dart';
+import 'package:instagram/screens/search.dart';
 
 class ChatMessages extends StatefulWidget {
   const ChatMessages({Key? key}) : super(key: key);
@@ -44,7 +45,11 @@ class _ChatMessagesState extends State<ChatMessages> {
             icon: Icon(Icons.search),
             onPressed: () {
               // Handle searching (you can implement searching logic here)
-              print('Search button clicked!');
+              // print('Search button clicked!');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
             },
           ),
         ],
@@ -80,9 +85,9 @@ class _ChatMessagesState extends State<ChatMessages> {
               final messageData = loadedMessages[index].data();
               final username = messageData['username'];
               final text = messageData['text'];
-              final photoURL = messageData['photoURL'];
+              // final photoURL = messageData['photoURL'];
 
-              return _buildChatMessage(username, text, photoURL);
+              return _buildChatMessage(username, text);
             },
           );
         },
@@ -90,16 +95,17 @@ class _ChatMessagesState extends State<ChatMessages> {
     );
   }
 
-  Widget _buildChatMessage(String username, String text, String photoURL) {
+  Widget _buildChatMessage(String username, String text) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(photoURL),
-          ),
+          // CircleAvatar(
+          //   radius: 20,
+          //   backgroundImage: NetworkImage(photoURL ??
+          //       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLorGAuZfVX3ZCV_Pz0QZlcOvXzPHKELhVPA&usqp=CAU'),
+          // ),
           SizedBox(width: 8),
           Expanded(
             child: Column(

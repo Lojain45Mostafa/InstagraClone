@@ -66,12 +66,12 @@ class MyApp extends StatelessWidget {
         // ),
 
         // home: SignupScreen(),
-        // home: LoginScreen(),
+        home: LoginScreen(),
         // home: ChatMessages(),
         // home: const ChatTestPage(
         //   receiverUserEmail: 'lojain22@gmail.com',
         //   receiverUserID: 'Ge74dteyqZN1qFWyUeO8MW3KBiz1',
-        home: FeedScreen(),
+        // home: FeedScreen(),
         // ),
       ),
     );
