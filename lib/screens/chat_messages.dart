@@ -31,6 +31,15 @@ class _ChatMessagesState extends State<ChatMessages> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat Messages'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const FeedScreen()),
+            ); // This will navigate back to the previous screen (FeedScreen)
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
