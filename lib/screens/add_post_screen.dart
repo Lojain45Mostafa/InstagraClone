@@ -6,8 +6,7 @@ import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/models/user.dart';
 import 'package:provider/provider.dart';
-import 'package:instagram/providers/user_provider.dart' ;
-
+import 'package:instagram/providers/user_provider.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -17,7 +16,6 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-
   Uint8List? _file;
   final TextEditingController _descriptionController = TextEditingController();
   bool _isLoading = false;
@@ -25,34 +23,37 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void postImage(
     //they are accepting arguments from here because there is a provider down
     String uid,
-   String username,
-   String profImage,
+    String username,
+    String profImage,
   ) async {
     setState(() {
       _isLoading = true;
     });
-   try{
+    try {
       String res = await FirestoreMethods().uploadPost(
-        _descriptionController.text ,
-         _file!, uid, username,
-          profImage,
-          );
-   
-   if(res =='success') {
-     setState(() {
-      _isLoading = false;
-    });
-    showSnackBar(context, 'posted!');
-   } else {
-     setState(() {
-      _isLoading = false;
-    });
-      showSnackBar(context, res );
-   }
-   } catch(e){
-    showSnackBar(context, e.toString());
-   }
+        _descriptionController.text,
+        _file!,
+        uid,
+        username,
+        profImage,
+      );
+
+      if (res == 'success') {
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, 'posted!');
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, res);
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
+
   _selectImage(BuildContext context) async {
     return showDialog(
         context: context,
@@ -98,20 +99,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
         });
   }
 
+  void ClearImage() {
+    setState(() {
+      _file = null;
+    });
+  }
 
-void ClearImage(){
-  setState(() {
-    _file = null;
-  });
-}
-@override
+  @override
   void dispose() {
     super.dispose();
     _descriptionController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     // var user;
@@ -134,10 +135,10 @@ void ClearImage(){
               actions: [
                 TextButton(
                     onPressed: () => postImage(
-                    userProvider.getUser.uid,
-                    userProvider.getUser.username,
-                    userProvider.getUser.photoUrl,
-                      ),
+                          userProvider.getUser.uid,
+                          userProvider.getUser.username,
+                          userProvider.getUser.photoUrl,
+                        ),
                     child: const Text(
                       'Post',
                       style: TextStyle(
@@ -150,7 +151,9 @@ void ClearImage(){
             ),
             body: Column(
               children: [
-                _isLoading? const LinearProgressIndicator() : const Padding(padding: EdgeInsets.only(top: 0.0)),
+                _isLoading
+                    ? const LinearProgressIndicator()
+                    : const Padding(padding: EdgeInsets.only(top: 0.0)),
                 const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

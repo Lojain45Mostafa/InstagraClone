@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/resources/auth_methods.dart';
+import 'package:instagram/screens/feed_screen.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
@@ -68,6 +69,11 @@ class _SignupScreenState extends State<SignupScreen> {
     if (res == "success") {
       setState(() {
         _isLoading = false;
+        // Navigate to feed_screen.dart
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const FeedScreen()),
+        );
       });
     } else {
       setState(() {

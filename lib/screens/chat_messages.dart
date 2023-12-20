@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram/screens/feed_screen.dart';
 import 'package:instagram/screens/new_message.dart';
 import 'package:instagram/screens/search.dart';
 
