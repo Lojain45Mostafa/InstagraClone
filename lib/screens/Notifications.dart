@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/resources/notifications_methods.dart';
 import 'package:instagram/utils/colors.dart';
+import 'package:instagram/models/notificationType.dart';
+import 'package:instagram/models/notifications.dart' as model;
+
+import '../models/post.dart';
+import '../models/user.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({Key? key});
@@ -18,76 +24,78 @@ class NotificationItem {
 }
 
 class _NotificationsState extends State<Notifications> {
-  final List<NotificationItem> notifications = [
-    NotificationItem(
-        username: 'UserA', action: 'liked', postText: 'Awesome photo!'),
-    NotificationItem(
-        username: 'UserB', action: 'commented', postText: 'Great shot!'),
-    NotificationItem(
-        username: 'UserC',
-        action: 'followed',
-        postText: 'Started following you'),
-    NotificationItem(
-        username: 'UserD',
-        action: 'requested to follow',
-        postText: 'Wants to follow you'),
-  ];
+
+  
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
         backgroundColor: mobileBackgroundColor,
       ),
-      body: ListView.builder(
-        itemCount: notifications.length,
+      body: FutureBuilder<List<model.Notifications>>(
+        future: NotificationsMethods.GetNotifications("UUnNUkznPCcNmMFLbH71v2uptpG2"), // Your asynchronous function call
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Display a loading indicator while waiting for the Future
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // Display an error message if the Future fails
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            // Display the data using ListView.builder once the Future completes
+            var data = snapshot.data!;
+            return ListView.builder(
+        itemCount: data.length,
         itemBuilder: (context, index) {
-          NotificationItem notification = notifications[index];
+          model.Notifications not = data[index];
+          print(not.id);
+          NotificationItem notification = NotificationItem(username: not.sender.username, action: not.type.description, postText: not.post.description);
           return Dismissible(
             key: Key(notification.username + index.toString()),
-            onDismissed: (direction) {
+            onDismissed: (direction) async {
               // Remove the item from the data source
-              final removedNotification = notifications.removeAt(index);
-
+              final removedNotification = data.removeAt(index);
+              await NotificationsMethods.deleteNotification(not);
               // Show a snackbar to indicate the item is dismissed
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Notification dismissed'),
-                  duration: Duration(seconds: 2),
+                  content: const Text('Notification dismissed'),
+                  duration: const Duration(seconds: 2),
                   action: SnackBarAction(
                     label: 'Undo',
-                    onPressed: () {
+                    onPressed: () async {
                       // Restore the removed notification
+                      await model.Notifications.sendNotification(senderID: "Ge74dteyqZN1qFWyUeO8MW3KBiz1", receiverID: "UUnNUkznPCcNmMFLbH71v2uptpG2", postID: "99e08680-fd7a-1e08-82f4-37c53fe15271", typeID: "5ds9o3g3tG4x81i44rs7");
+
                       setState(() {
-                        notifications.insert(index, removedNotification);
+                        data.insert(index, removedNotification);
                       });
                     },
                   ),
                 ),
               );
-
-              // You also need to remove the Dismissible widget from the tree
-              // to resolve the warning
-              setState(() {});
             },
             background: Container(
               color: Colors.red,
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Icon(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: const Icon(
                 Icons.delete,
                 color: Colors.white,
               ),
             ),
             child: ListTile(
-              leading: CircleAvatar(
+              leading: const CircleAvatar(
                 backgroundColor: Colors.blue,
                 child: Icon(Icons.person),
               ),
               title: Text(
                 notification.username,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: buildNotificationSubtitle(notification),
               onTap: () {
@@ -96,7 +104,10 @@ class _NotificationsState extends State<Notifications> {
             ),
           );
         },
-      ),
+      );
+          }
+        }, // FutureBuilder ends here
+      ), //
     );
   }
 
