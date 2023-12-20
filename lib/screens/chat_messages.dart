@@ -50,6 +50,7 @@ class _ChatMessagesState extends State<ChatMessages> {
         ],
       ),
       body: StreamBuilder(
+        // rebuilds UI whenver the data is received
         // Listen to the stream of messages
         stream: FirebaseFirestore.instance
             .collection('chat')
