@@ -139,6 +139,35 @@ class _PostCardState extends State<PostCard> {
                   fit: BoxFit.cover,
                   ),
                 ),
+    //               child: Stack(
+    // alignment: Alignment.center,
+    // children: [
+    //   SizedBox(
+    //     height: MediaQuery.of(context).size.height * 0.35,
+    //     width: double.infinity,
+    //     child: Image.network(
+    //       widget.snap['postUrl'].toString(),
+    //       fit: BoxFit.cover,
+    //       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+    //         if (loadingProgress == null) {
+    //           return child;
+    //         } else {
+    //           return Center(
+    //             child: CircularProgressIndicator(
+    //               value: loadingProgress.expectedTotalBytes != null
+    //                   ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+    //                   : null,
+    //             ),
+    //           );
+    //         }
+    //       },
+    //       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+    //         return Center(
+    //           child: Icon(Icons.error),
+    //         );
+    //       },
+    //     ),
+    //   ),
                 AnimatedOpacity(
                   duration: const Duration( milliseconds: 200),
                   opacity: isLikeAnimating ? 1 :0 ,
