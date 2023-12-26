@@ -10,6 +10,7 @@ import 'package:instagram/utils/global_variables.dart';
 import 'package:instagram/models/user.dart' as model;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:instagram/models/notifications.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -97,12 +98,13 @@ class _PostCardState extends State<PostCard> {
                       shrinkWrap: true ,
                       children: [
                         'Delete',
-                        'edit',
-                        'report',
                       ]
                       .map(
                         (e) =>InkWell(
-                        onTap: () {},
+                        onTap: () async {
+                          FirestoreMethods().deletePost(widget.snap['postId']);
+                          Navigator.of(context).pop();
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                           vertical: 12, horizontal: 16),
@@ -169,6 +171,7 @@ class _PostCardState extends State<PostCard> {
               IconButton(
                 onPressed: () async {
                 await FirestoreMethods().likePost(widget.snap['postId'].toString(),user.uid,widget.snap['likes'],);
+                await Notifications.sendNotification(senderID: "Ge74dteyqZN1qFWyUeO8MW3KBiz1", receiverID: "UUnNUkznPCcNmMFLbH71v2uptpG2", postID: "99e08680-fd7a-1e08-82f4-37c53fe15271", typeID: "5ds9o3g3tG4x81i44rs7");
                 },
                icon: widget.snap['likes'].contains(user.uid) ? const Icon(
                 Icons.favorite,
