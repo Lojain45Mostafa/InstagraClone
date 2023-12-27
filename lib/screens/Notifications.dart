@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/resources/notifications_methods.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/models/notificationType.dart';
 import 'package:instagram/models/notifications.dart' as model;
+import 'package:provider/provider.dart';
 
 import '../models/post.dart';
 import '../models/user.dart';
@@ -37,7 +39,7 @@ class _NotificationsState extends State<Notifications> {
         backgroundColor: mobileBackgroundColor,
       ),
       body: FutureBuilder<List<model.Notifications>>(
-        future: NotificationsMethods.GetNotifications("UUnNUkznPCcNmMFLbH71v2uptpG2"), // Your asynchronous function call
+        future: NotificationsMethods.GetNotifications(context.read<UserProvider>().getUser.uid), // Your asynchronous function call
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Display a loading indicator while waiting for the Future
