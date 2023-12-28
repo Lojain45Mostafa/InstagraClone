@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CommentCard extends StatelessWidget {
+class CommentCard extends StatefulWidget {
   final dynamic snap;
 
   const CommentCard({Key? key, required this.snap}) : super(key: key);
 
   @override
+  _CommentCardState createState() => _CommentCardState();
+}
+
+class _CommentCardState extends State<CommentCard> {
+  bool isLiked = false;
+
+  @override
   Widget build(BuildContext context) {
-    String profilePic = snap['profilePic'] ?? ''; // Access profile picture
-    String name = snap['name'] ?? ''; // Access name
-    String text = snap['text'] ?? ''; // Access comment text
+    String profilePic = widget.snap['profilePic'] ?? '';
+    String name = widget.snap['name'] ?? '';
+    String text = widget.snap['text'] ?? '';
     DateTime datePublished =
-        snap['datePublished']?.toDate() ?? DateTime.now(); // Access date
+        widget.snap['datePublished']?.toDate() ?? DateTime.now();
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
@@ -50,9 +57,17 @@ class CommentCard extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: const Icon(Icons.favorite, size: 16),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isLiked = !isLiked; // Toggle liked state
+              });
+            },
+            icon: Icon(
+              isLiked ? Icons.favorite : Icons.favorite_border,
+              size: 16,
+              color: isLiked ? Colors.red : null,
+            ),
           ),
         ],
       ),

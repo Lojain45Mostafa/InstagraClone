@@ -145,5 +145,17 @@ Future<String> postComment(String postId,String text , String uid ,String name ,
     return res;
   }
 
+  Future<String> restorePost(Map<String, dynamic> post) async {
+  String res = 'Some error occurred';
+  try {
+    // Assuming you have a 'posts' collection in Firestore
+    await _firestore.collection('posts').doc(post['postId']).set(post);
+    res = 'success';
+  } catch (err) {
+    res = err.toString();
+  }
+  return res;
+}
+
 }
 
