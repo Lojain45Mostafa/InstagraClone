@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram/resources/firestore_methods.dart';
+import 'package:instagram/screens/feed_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/models/user.dart';
@@ -18,18 +19,16 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
   final TextEditingController _descriptionController = TextEditingController();
-  bool _isLoading = false;
+  bool isLoading = false;
 
-  void postImage(
-    //they are accepting arguments from here because there is a provider down
-    String uid,
-    String username,
-    String profImage,
-  ) async {
+    void postImage(String uid, String username, String profImage) async {
     setState(() {
-      _isLoading = true;
+      // Set the loading indicator to true to indicate the start of a process
+      isLoading = true;
     });
+    // start the loading
     try {
+      // upload to storage and db
       String res = await FirestoreMethods().uploadPost(
         _descriptionController.text,
         _file!,
@@ -37,22 +36,43 @@ class _AddPostScreenState extends State<AddPostScreen> {
         username,
         profImage,
       );
-
-      if (res == 'success') {
+      if (res == "success") {
         setState(() {
-          _isLoading = false;
+          isLoading = false;
         });
-        showSnackBar(context, 'posted!');
+        //Widgets have a property called mounted which indicates whether 
+        //they are currently part of the widget tree and thus able to be rendered on the screen.
+        //When you check if (context.mounted), you're ensuring that the widget associated with the provided BuildContext
+        // is still available and active in the widget tree before performing certain actions
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            'Posted!',
+          );
+        }
+        ClearImage();
+         // Navigate back to the FeedScreen after posting successfully
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const FeedScreen()),
+      // );
       } else {
-        setState(() {
-          _isLoading = false;
-        });
-        showSnackBar(context, res);
+        
+        if (context.mounted) {
+          showSnackBar(context, res);
+        }
       }
-    } catch (e) {
-      showSnackBar(context, e.toString());
+    } catch (err) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(
+        context,
+        err.toString(),
+      );
     }
   }
+
 
   _selectImage(BuildContext context) async {
     return showDialog(
@@ -128,7 +148,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               backgroundColor: mobileBackgroundColor,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () {},
+                onPressed: ClearImage,
               ),
               title: const Text('Post to'),
               centerTitle: false,
@@ -151,7 +171,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: [
-                _isLoading
+                isLoading
                     ? const LinearProgressIndicator()
                     : const Padding(padding: EdgeInsets.only(top: 0.0)),
                 const Divider(),
@@ -159,10 +179,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
+                   CircleAvatar(
                       backgroundImage: NetworkImage(
-                          'https://plus.unsplash.com/premium_photo-1700124504129-02393b281f06?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                    ),
+                        userProvider.getUser.photoUrl,
+                      ),
+                   ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: TextField(

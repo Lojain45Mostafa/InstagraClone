@@ -71,54 +71,72 @@ class _PostCardState extends State<PostCard> {
 
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                     
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                        widget.snap['username'].toString(), 
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                IconButton(
-                onPressed: (){
-                  showDialog(context: context, builder: (context) =>Dialog(
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(vertical: 8,),
-                      shrinkWrap: true ,
-                      children: [
-                        'Delete',
-                      ]
-                      .map(
-                        (e) =>InkWell(
-                        onTap: () async {
-                          FirestoreMethods().deletePost(widget.snap['postId']);
-                          Navigator.of(context).pop();
+                  SizedBox(width: 12), // Add space between the CircleAvatar and the username
+    Text(
+      widget.snap['username'].toString(),
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    Spacer(),
+IconButton(
+  onPressed: () async {
+    String postId = widget.snap['postId']; // Extracting postId
+    // Show the 'Delete' option when the three dots are clicked
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          shrinkWrap: true,
+          children: [
+            'Delete',
+          ]
+          .map(
+            (e) => InkWell(
+              onTap: () async {
+                String deleteResult = await FirestoreMethods().deletePost(postId);
+                if (deleteResult == 'success') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Post deleted'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () async {
+                           await FirestoreMethods().restorePost(widget.snap);
                         },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 16),
-                          child: Text(e),  
-                        ),
-                      ))
-                      .toList()
+                      ),
                     ),
-                  ));
-                }, 
-                icon: const Icon(
-                  Icons.more_vert,
-                  ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Deletion failed'),
+                    ),
+                  );
+                }
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Text(e),
+              ),
             ),
+          )
+          .toList(),
+        ),
+      ),
+    );
+  }, 
+  icon: const Icon(
+    Icons.more_vert,
+  ),
+),
+
+
+
+
+
               ],
             ),
           ),
@@ -254,20 +272,53 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               ),
-              InkWell(
-                onTap: (){},
-                child: 
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical:4 ),
-                    child: Text(
-                      'view all $commentLen comments',
-                    style: const TextStyle( 
-                      fontSize: 16,
-                     color: secondaryColor
-                     ),
-                    ),
-                  ),
+StreamBuilder<QuerySnapshot>(
+  stream: FirebaseFirestore.instance
+      .collection('posts')
+      .doc(widget.snap['postId'])
+      .collection('comments')
+      .snapshots(),
+  builder: (context, snapshot) {
+    // if (snapshot.connectionState == ConnectionState.waiting) {
+    //   return CircularProgressIndicator(); // Or a loading indicator
+    // }
+
+    // if (snapshot.hasError) {
+    //   return Text('Error: ${snapshot.error}');
+    // }
+
+    if (snapshot.hasData) {
+      // Update commentLen with the current length of comments
+      commentLen = snapshot.data!.docs.length;
+
+      return InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CommentsScreen(
+                snap: widget.snap,
+                postId: widget.snap['postId'].toString(),
               ),
+            ),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(
+            'view all $commentLen comments',
+            style: const TextStyle(
+              fontSize: 16,
+              color: secondaryColor,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(); // Return an empty widget or handle other states
+  },
+),
+
                Container(
                     padding: const EdgeInsets.symmetric(vertical:4 ),
                     child:Text(
