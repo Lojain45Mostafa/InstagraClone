@@ -1,31 +1,42 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class StorageMethods {
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //adding image to firebase storage
   Future<String> uploadImageToFirebaseStorage(
-      String childName, Uint8List file, bool isPost) async {
-    Reference ref =
-        _storage.ref().child(childName).child(_auth.currentUser!.uid);
+      String childName, XFile file, bool isPost) async {
+    //a link of an errored image or image not found
+    if (file == null) {
+      print("file is nullllllllllllllll");
+      return "Error";
+    }
+    Reference refreenceRoot = FirebaseStorage.instance.ref();
+    Reference referenceDir = refreenceRoot.child('testing');
+    Reference oldRef = referenceDir.child(_auth.currentUser!.uid);
     //asking for childname and going to create folder at that childname then uplaod the image and get the URL of it
     //we will have a child of posts then a folder of the uid of the user
-    if(isPost){
-      //if it's a post we will just generate a unique id  
+    if (isPost) {
+      //if it's a post we will just generate a unique id
       String id = const Uuid().v1();
-      ref = ref.child(id);
+      oldRef = referenceDir.child(id).child(file.name);
     }
-    
-    UploadTask uploadTask = ref.putData(file);
 
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
+    try {
+      await oldRef.putFile(File(file.path));
 
-    return downloadUrl;
+      String downloadUrl = await oldRef.getDownloadURL();
+      print(downloadUrl);
+      return downloadUrl;
+    } catch (e) {
+      print("errorrrrrrrr" + e.toString());
+    }
+    return "error";
   }
 }

@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ class AuthMethods {
     DocumentSnapshot snap = await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get(); 
+        .get();
     return model.User.fromSnap(snap);
   }
 
@@ -24,7 +26,7 @@ class AuthMethods {
     required email,
     required password,
     required bio,
-    required Uint8List file,
+    required XFile file,
   }) async {
     String res = "Error occurred";
 
@@ -77,7 +79,7 @@ class AuthMethods {
   }
 
   //function for login
-  Future<String> loginUser({
+  Future<Map<String, dynamic>> loginUser({
     required String email,
     required String password,
   }) async {
@@ -85,18 +87,18 @@ class AuthMethods {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         // logging in user with email and password
-        await _auth.signInWithEmailAndPassword(
+        final credentials = await _auth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
-        res = "success";
+        return {"res": credentials.user, "error": false};
       } else {
-        res = "Please enter all the fields";
+        return {"res": "Please enter all the fields", "error": true};
       }
     } catch (err) {
       res = "Error: ${err.toString()}";
+      return {"res": res, "error": true};
     }
-    return res;
   }
 
 //signing out

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/resources/auth_methods.dart';
+import 'package:instagram/responsive/mobile_screen_layout.dart';
 import 'package:instagram/screens/feed_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/text_field_input.dart';
+import 'package:provider/provider.dart';
+
+import '../models/notifications.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -26,25 +31,28 @@ class _LoginScreenState extends State<LoginScreen> {
     _passController.dispose();
   }
 
-  void loginUser() async {
+  void loginUser(BuildContext context) async {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      String res = await AuthMethods().loginUser(
+      Map<String, dynamic> res = await AuthMethods().loginUser(
         email: _emailController.text,
         password: _passController.text,
       );
 
-      if (res == "success") {
+      if (res["error"] == false) {
         // Navigate to feed_screen.dart
+        context
+            .read<UserProvider>()
+            .setUser(await Notifications.GetUserById(res["res"].uid));
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const FeedScreen()),
+          MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
         );
       } else {
-        showSnackBar(context, res);
+        showSnackBar(context, res["res"]);
       }
     } catch (e) {
       print("Login Error: $e");
@@ -93,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 64),
             InkWell(
-              onTap: loginUser,
+              onTap: () => loginUser(context),
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.center,

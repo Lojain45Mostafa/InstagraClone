@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:instagram/models/post.dart';
@@ -11,7 +12,7 @@ class FirestoreMethods {
   Future<String> uploadPost(
     //we will take them from user
     String description,
-    Uint8List file,
+    XFile file,
     String uid,
     String username,
     String profImage,
@@ -83,10 +84,9 @@ class FirestoreMethods {
     }
   }
 
-
-  Future<void> likePost(String postId , String uid , List likes) async{
-    try{
-         if (likes.contains(uid)) {
+  Future<void> likePost(String postId, String uid, List likes) async {
+    try {
+      if (likes.contains(uid)) {
         // if the likes list contains the user uid, we need to remove it
         //that checks if we already liked the post so that we can dislike it
         await _firestore.collection('posts').doc(postId).update({
@@ -94,23 +94,27 @@ class FirestoreMethods {
           'likes': FieldValue.arrayRemove([uid])
           //in this field likes remove like with this id from the array
         });
-      }else {
+      } else {
         // else we need to add uid to the likes array
-       await _firestore.collection('posts').doc(postId).update({
+        await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid])
         });
       }
-    }catch(e){
-      print(e.toString(),);
+    } catch (e) {
+      print(
+        e.toString(),
+      );
     }
   }
-Future<String> postComment(String postId,String text , String uid ,String name ,String profilePic) async{
-   String res = "Some error occurred";
- try {
+
+  Future<String> postComment(String postId, String text, String uid,
+      String name, String profilePic) async {
+    String res = "Some error occurred";
+    try {
       if (text.isNotEmpty) {
         // if the likes list contains the user uid, we need to remove it
         String commentId = const Uuid().v1();
-       await  _firestore
+        await _firestore
             .collection('posts')
             .doc(postId)
             .collection('comments')
@@ -131,10 +135,10 @@ Future<String> postComment(String postId,String text , String uid ,String name ,
       res = err.toString();
     }
     return res;
-}
+  }
 
 //deleting post
- Future<String> deletePost(String postId) async {
+  Future<String> deletePost(String postId) async {
     String res = "Some error occurred";
     try {
       await _firestore.collection('posts').doc(postId).delete();
@@ -146,16 +150,14 @@ Future<String> postComment(String postId,String text , String uid ,String name ,
   }
 
   Future<String> restorePost(Map<String, dynamic> post) async {
-  String res = 'Some error occurred';
-  try {
-    // Assuming you have a 'posts' collection in Firestore
-    await _firestore.collection('posts').doc(post['postId']).set(post);
-    res = 'success';
-  } catch (err) {
-    res = err.toString();
+    String res = 'Some error occurred';
+    try {
+      // Assuming you have a 'posts' collection in Firestore
+      await _firestore.collection('posts').doc(post['postId']).set(post);
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
   }
-  return res;
 }
-
-}
-

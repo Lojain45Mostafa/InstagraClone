@@ -23,7 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  Uint8List? _image;
+  XFile? _image;
   bool _isLoading = false;
 
   // Define a global key for the form
@@ -92,7 +92,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
+    XFile im = await pickImage(ImageSource.gallery);
     // set state because we need to display the image we selected on the circle avatar
     setState(() {
       _image = im;
@@ -127,7 +127,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     _image != null
                         ? CircleAvatar(
                             radius: 64,
-                            backgroundImage: MemoryImage(_image!),
+                            backgroundImage: FileImage(File(_image!.path)),
                             backgroundColor: Colors.red,
                           )
                         : const CircleAvatar(
