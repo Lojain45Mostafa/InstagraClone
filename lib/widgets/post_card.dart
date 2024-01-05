@@ -4,6 +4,7 @@ import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/screens/comments_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
+import 'package:instagram/widgets/buttons.dart';
 import 'package:instagram/widgets/like_animation.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/utils/global_variables.dart';
@@ -44,6 +45,31 @@ class _PostCardState extends State<PostCard> {
    setState(() {
      //to see the comment length
    });
+  }
+  Future<void> DeletepostFun(BuildContext context) async {
+     QuerySnapshot snap2 = await FirebaseFirestore.instance
+                 .collection('posts').doc(widget.snap['postId']).collection('comments').get();
+                String deleteResult = await FirestoreMethods().deletePost( widget.snap['postId']);
+                if (deleteResult == 'success') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Post deleted'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () async {
+                           await FirestoreMethods().restorePost(widget.snap,snap2);
+                        },
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Deletion failed'),
+                    ),
+                  );
+                }
+                Navigator.of(context).pop(); // Close the dialog
   }
   @override
   Widget build(BuildContext context) {
@@ -90,40 +116,9 @@ IconButton(
           padding: const EdgeInsets.symmetric(vertical: 8),
           shrinkWrap: true,
           children: [
-            'Delete',
-          ]
-          .map(
-            (e) => InkWell(
-              onTap: () async {
-                String deleteResult = await FirestoreMethods().deletePost(postId);
-                if (deleteResult == 'success') {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Post deleted'),
-                      action: SnackBarAction(
-                        label: 'Undo',
-                        onPressed: () async {
-                           await FirestoreMethods().restorePost(widget.snap);
-                        },
-                      ),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Deletion failed'),
-                    ),
-                  );
-                }
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                child: Text(e),
-              ),
-            ),
-          )
-          .toList(),
+            CustomButton(buttonText: 'Delete', onTapFunction: DeletepostFun,),
+             CustomButton(buttonText: 'Save Post', onTapFunction: DeletepostFun,)
+          ] 
         ),
       ),
     );

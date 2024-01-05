@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram/resources/firestore_methods.dart';
+import 'package:instagram/responsive/mobile_screen_layout.dart';
 import 'package:instagram/screens/feed_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
@@ -51,11 +52,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
           );
         }
         ClearImage();
-         // Navigate back to the FeedScreen after posting successfully
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const FeedScreen()),
-      // );
+      // Navigate back to the FeedScreen after posting successfully
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
+      );
       } else {
         
         if (context.mounted) {
