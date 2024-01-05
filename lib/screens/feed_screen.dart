@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/screens/add_post_screen.dart';
 import 'package:instagram/screens/chat_messages.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,7 +23,7 @@ class FeedScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ChatMessages()),
               );
@@ -35,7 +36,7 @@ class FeedScreen extends StatelessWidget {
       ),
       body: StreamBuilder(
         //using streambuilder to listen to the real time database
-        stream: FirebaseFirestore.instance.collection('posts') .orderBy('datePublished' , descending: true).snapshots(),
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
         //we are not using get because this is realtime database (using snapshot) and we are not using .doc(id) cuz we want all the documents
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {

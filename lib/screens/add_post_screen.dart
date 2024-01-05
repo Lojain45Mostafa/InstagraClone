@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'dart:typed_data';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/responsive/mobile_screen_layout.dart';
 import 'package:instagram/screens/feed_screen.dart';
+import 'package:instagram/resources/storage_methods.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/models/user.dart';
@@ -18,18 +21,20 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  Uint8List? _file;
+  XFile? _file;
   final TextEditingController _descriptionController = TextEditingController();
-  bool isLoading = false;
+  bool _isLoading = false;
 
-    void postImage(String uid, String username, String profImage) async {
+  void postImage(
+    //they are accepting arguments from here because there is a provider down
+    String uid,
+    String username,
+    String profImage,
+  ) async {
     setState(() {
-      // Set the loading indicator to true to indicate the start of a process
-      isLoading = true;
+      _isLoading = true;
     });
-    // start the loading
     try {
-      // upload to storage and db
       String res = await FirestoreMethods().uploadPost(
         _descriptionController.text,
         _file!,
@@ -37,10 +42,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
         username,
         profImage,
       );
-      if (res == "success") {
+
+      if (res == 'success') {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
         });
+
         //Widgets have a property called mounted which indicates whether 
         //they are currently part of the widget tree and thus able to be rendered on the screen.
         //When you check if (context.mounted), you're ensuring that the widget associated with the provided BuildContext
@@ -58,22 +65,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
         MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
       );
       } else {
-        
-        if (context.mounted) {
-          showSnackBar(context, res);
-        }
+        setState(() {
+          _isLoading = false;
+        });
+        showSnackBar(context, res);
       }
-    } catch (err) {
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(
-        context,
-        err.toString(),
-      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
     }
   }
-
 
   _selectImage(BuildContext context) async {
     return showDialog(
@@ -87,7 +87,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 child: const Text('Take a photo'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  Uint8List file = await pickImage(
+                  XFile file = await pickImage(
                     ImageSource.camera,
                   );
                   setState(() {
@@ -100,9 +100,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 child: const Text('Choose from gallery'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  Uint8List file = await pickImage(
+                  XFile file = await pickImage(
                     ImageSource.gallery,
                   );
+
+                  StorageMethods storageMethods = StorageMethods();
+                  await storageMethods.uploadImageToFirebaseStorage(
+                      "testingImages", file, true);
                   setState(() {
                     _file = file;
                   });
@@ -149,7 +153,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               backgroundColor: mobileBackgroundColor,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: ClearImage,
+                onPressed: () {},
               ),
               title: const Text('Post to'),
               centerTitle: false,
@@ -172,7 +176,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Column(
               children: [
-                isLoading
+                _isLoading
                     ? const LinearProgressIndicator()
                     : const Padding(padding: EdgeInsets.only(top: 0.0)),
                 const Divider(),
@@ -180,11 +184,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   CircleAvatar(
+                    CircleAvatar(
                       backgroundImage: NetworkImage(
-                        userProvider.getUser.photoUrl,
-                      ),
-                   ),
+                          'https://plus.unsplash.com/premium_photo-1700124504129-02393b281f06?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: TextField(
@@ -204,7 +207,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                            image: MemoryImage(_file!),
+                            image: FileImage(File(_file!.path)),
                             fit: BoxFit.fill,
                             alignment: FractionalOffset.topCenter,
                           )),

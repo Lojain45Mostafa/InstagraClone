@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/resources/firestore_methods.dart';
+import 'package:instagram/resources/notifications_methods.dart';
 import 'package:instagram/screens/comments_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
@@ -183,8 +184,15 @@ IconButton(
                 child:
               IconButton(
                 onPressed: () async {
-                await FirestoreMethods().likePost(widget.snap['postId'].toString(),user.uid,widget.snap['likes'],);
-                await Notifications.sendNotification(senderID: "Ge74dteyqZN1qFWyUeO8MW3KBiz1", receiverID: "UUnNUkznPCcNmMFLbH71v2uptpG2", postID: "99e08680-fd7a-1e08-82f4-37c53fe15271", typeID: "5ds9o3g3tG4x81i44rs7");
+                  List<dynamic> likes = widget.snap["likes"];
+                await FirestoreMethods().likePost(widget.snap['postId'].toString(),user.uid,likes,);
+                if(!likes.contains(user.uid))
+                {
+                await Notifications.sendNotification(senderID: context.read<UserProvider>().getUser.uid, receiverID: widget.snap["uid"], postID: widget.snap["postId"], typeID: "5ds9o3g3tG4x81i44rs7");
+                }
+                else{
+                  await NotificationsMethods.deleteNotificationByDetails(context.read<UserProvider>().getUser.uid, widget.snap["uid"], widget.snap["postId"], "5ds9o3g3tG4x81i44rs7");
+                }
                 },
                icon: widget.snap['likes'].contains(user.uid) ? const Icon(
                 Icons.favorite,

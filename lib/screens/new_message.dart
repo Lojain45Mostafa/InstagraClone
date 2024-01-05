@@ -3,22 +3,31 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram/models/chatRoom.dart';
+import 'package:instagram/models/message.dart';
+import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/screens/Message_bubble.dart';
 import 'package:instagram/screens/camera_test.dart';
+import 'package:instagram/screens/chat_messages.dart';
+import 'package:instagram/services/chatTest_service.dart';
 import 'package:instagram/utils/utils.dart';
+import 'package:provider/provider.dart';
+import 'package:instagram/models/user.dart' as model;
 
 class NewMessage extends StatefulWidget {
-  const NewMessage({Key? key});
-
+  const NewMessage({Key? key, required this.room, required this.reciever});
+  final model.User reciever;
+  final ChatRoom room;
   @override
   _NewMessageState createState() => _NewMessageState();
 }
 
 class _NewMessageState extends State<NewMessage> {
   final _messageController = TextEditingController();
-  Uint8List? _image;
-  List<Map<String, dynamic>> _chatMessages = [];
+  XFile? _image;
+  // List<Map<String, dynamic>> _chatMessages = [];
 
   @override
   void dispose() {
@@ -26,29 +35,29 @@ class _NewMessageState extends State<NewMessage> {
     super.dispose();
   }
 
-  Future<void> retrieveMessages() async {
-    try {
-      // Reference to the 'chat' collection in Firestore
-      CollectionReference chatCollection =
-          FirebaseFirestore.instance.collection('chat');
+  // Future<void> retrieveMessages() async {
+  //   try {
+  //     // Reference to the 'chat' collection in Firestore
+  //     CollectionReference chatCollection =
+  //         FirebaseFirestore.instance.collection('chat');
 
-      // Query the collection for messages, ordered by createdAt
-      QuerySnapshot querySnapshot =
-          await chatCollection.orderBy('createdAt').get();
+  //     // Query the collection for messages, ordered by createdAt
+  //     QuerySnapshot querySnapshot =
+  //         await chatCollection.orderBy('createdAt').get();
 
-      // Extract messages from the snapshot
-      List<QueryDocumentSnapshot> messages = querySnapshot.docs;
+  //     // Extract messages from the snapshot
+  //     List<QueryDocumentSnapshot> messages = querySnapshot.docs;
 
-      // Update the chat messages list with the retrieved messages
-      _chatMessages = messages
-          .map((message) => message.data() as Map<String, dynamic>)
-          .toList();
+  //     // Update the chat messages list with the retrieved messages
+  //     _chatMessages = messages
+  //         .map((message) => message.data() as Map<String, dynamic>)
+  //         .toList();
 
-      print(_chatMessages.toString());
-    } catch (error) {
-      print('Error retrieving messages: $error');
-    }
-  }
+  //     print(_chatMessages.toString());
+  //   } catch (error) {
+  //     print('Error retrieving messages: $error');
+  //   }
+  // }
 
   void _submitMessage() async {
     final enteredMessage = _messageController.text;
@@ -77,7 +86,7 @@ class _NewMessageState extends State<NewMessage> {
   }
 
   selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
+    XFile im = await pickImage(ImageSource.gallery);
     // set state because we need to display the image we selected on the circle avatar
     setState(() {
       _image = im;
@@ -111,7 +120,7 @@ class _NewMessageState extends State<NewMessage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Message'),
+        title: Text(widget.reciever.username),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -119,33 +128,39 @@ class _NewMessageState extends State<NewMessage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: FutureBuilder(
-                future: retrieveMessages(),
+              child: FutureBuilder<List<Message>>(
+                future: ChatService.getMessagesByChatRoom(widget.room.id),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   } else {
+                    List<Message> chatMessages = snapshot.data!;
                     return ListView.builder(
-                      itemCount: _chatMessages.length,
-                      itemBuilder: (context, index) {
-                        final isMe = _chatMessages[index]['userId'] ==
-                            FirebaseAuth.instance.currentUser?.uid;
-
-                        if (index == 0) {
+                        itemCount: chatMessages.length,
+                        itemBuilder: (context, index) {
+                          final isMe = chatMessages[index].sender.uid ==
+                              FirebaseAuth.instance.currentUser?.uid;
+                          Message? prevMessage = null;
+                          if (index > 0) {
+                            prevMessage = chatMessages[index - 1];
+                          }
+                          // if (index == 0 || (index > 0 && index < chatMessages.length)) {
                           return MessageBubble.first(
-                            username: _chatMessages[index]['username'],
-                            photoURL: _chatMessages[index]['userImage'],
-                            message: _chatMessages[index]['text'],
+                            username: chatMessages[index].sender.username,
+                            photoURL: chatMessages[index].sender.photoUrl,
+                            message: chatMessages[index].message,
                             isMe: isMe,
-                          );
-                        } else {
-                          return MessageBubble.next(
-                            message: _chatMessages[index]['text'],
-                            isMe: isMe,
+                            prevMessage: prevMessage,
                           );
                         }
-                      },
-                    );
+                        // else {
+                        //   return MessageBubble.next(
+                        //     message: chatMessages[index].message,
+                        //     isMe: isMe,
+                        //   );
+                        // }
+                        // },
+                        );
                   }
                 },
               ),

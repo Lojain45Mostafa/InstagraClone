@@ -1,37 +1,46 @@
 // message_bubble.dart
 
 import 'package:flutter/material.dart';
+import 'package:instagram/models/message.dart';
+import 'package:instagram/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble.first({
+  MessageBubble.first({
     Key? key,
     required this.photoURL,
     required this.username,
     required this.message,
     required this.isMe,
+    this.prevMessage,
   }) : isFirstInSequence = true;
 
-  const MessageBubble.next({
-    Key? key,
-    required this.message,
-    required this.isMe,
-  })  : isFirstInSequence = false,
-        photoURL = null,
-        username = null;
-
-  final bool isFirstInSequence;
+  bool isFirstInSequence;
   final String? photoURL;
   final String? username;
   final String message;
   final bool isMe;
+  Message? prevMessage;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    print(isFirstInSequence);
+    if (prevMessage != null &&
+        isMe &&
+        prevMessage!.sender.uid == context.read<UserProvider>().getUser.uid) {
+      print("true");
+      isFirstInSequence = true;
+    }
+    if (prevMessage != null &&
+        !isMe &&
+        prevMessage!.sender.uid != context.read<UserProvider>().getUser.uid) {
+      print("false");
+      isFirstInSequence = false;
+    }
     return Stack(
       children: [
-        if (photoURL != null)
+        if (photoURL != null && isFirstInSequence == true)
           Positioned(
             top: 15,
             right: isMe ? 0 : null,
@@ -54,7 +63,7 @@ class MessageBubble extends StatelessWidget {
                     isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
                   if (isFirstInSequence) const SizedBox(height: 18),
-                  if (username != null)
+                  if (username != null && isFirstInSequence == true)
                     Padding(
                       padding: const EdgeInsets.only(
                         left: 13,
