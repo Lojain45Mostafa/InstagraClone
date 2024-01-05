@@ -141,23 +141,42 @@ class FirestoreMethods {
   Future<String> deletePost(String postId) async {
     String res = "Some error occurred";
     try {
+      CollectionReference commentsref =
+       _firestore.collection('posts').doc(postId).collection('comments');
+      var Allcomments = await commentsref.get();
+      for(var eachcomment in Allcomments.docs)
+      {
+        await eachcomment.reference.delete();
+      }
       await _firestore.collection('posts').doc(postId).delete();
       res = 'success';
     } catch (err) {
       res = err.toString();
     }
+    print (res);
     return res;
   }
 
-  Future<String> restorePost(Map<String, dynamic> post) async {
-    String res = 'Some error occurred';
-    try {
-      // Assuming you have a 'posts' collection in Firestore
-      await _firestore.collection('posts').doc(post['postId']).set(post);
-      res = 'success';
-    } catch (err) {
-      res = err.toString();
+
+  Future<String> restorePost(Map<String, dynamic> post, QuerySnapshot comments) async {
+  String res = 'Some error occurred';
+  try {
+    // Assuming you have a 'posts' collection in Firestore
+    await _firestore.collection('posts').doc(post['postId']).set(post);
+    for(var eachOneComment in comments.docs){
+        await _firestore.collection('posts').doc(post['postId']).collection('comments').doc(eachOneComment.id).set({
+          //3shan msh 3yzah y generate id gdeed 3yzah yakhod nafs el Id bta3 el adeem 
+          "commentId":eachOneComment['commentId'],
+          "datePublished":eachOneComment['datePublished'],
+          "name":eachOneComment['name'],
+          "profilePic":eachOneComment['profilePic'],
+          "text":eachOneComment['text'],
+          "uid":eachOneComment['uid'],
+          //byakhod el data el kanet already mwgouda f ecah one comment w yhotaha fel variables el gededa bt3tna
+        });
     }
-    return res;
+    res = 'success';
+  } catch (err) {
+    res = err.toString();
   }
 }

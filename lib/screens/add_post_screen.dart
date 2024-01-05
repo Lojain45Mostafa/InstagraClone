@@ -4,6 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram/resources/firestore_methods.dart';
+import 'package:instagram/responsive/mobile_screen_layout.dart';
+import 'package:instagram/screens/feed_screen.dart';
 import 'package:instagram/resources/storage_methods.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
@@ -45,7 +47,23 @@ class _AddPostScreenState extends State<AddPostScreen> {
         setState(() {
           _isLoading = false;
         });
-        showSnackBar(context, 'posted!');
+
+        //Widgets have a property called mounted which indicates whether 
+        //they are currently part of the widget tree and thus able to be rendered on the screen.
+        //When you check if (context.mounted), you're ensuring that the widget associated with the provided BuildContext
+        // is still available and active in the widget tree before performing certain actions
+        if (context.mounted) {
+          showSnackBar(
+            context,
+            'Posted!',
+          );
+        }
+        ClearImage();
+      // Navigate back to the FeedScreen after posting successfully
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
+      );
       } else {
         setState(() {
           _isLoading = false;
