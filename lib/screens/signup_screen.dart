@@ -2,14 +2,18 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/resources/auth_methods.dart';
+import 'package:instagram/responsive/mobile_screen_layout.dart';
 import 'package:instagram/screens/feed_screen.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/text_field_input.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io'; // bast5demha 34an a3rf ast5dem File el fel image picker aslun el import da byst5dem 34an el I/O operation w menhom el files
+import 'dart:io';
+
+import 'package:provider/provider.dart'; // bast5demha 34an a3rf ast5dem File el fel image picker aslun el import da byst5dem 34an el I/O operation w menhom el files
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -47,7 +51,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _bioController.dispose();
   }
 
-  void signUpUser() async {
+  void signUpUser(BuildContext context) async {
     // Ensure the form is valid
     if (_formKey.currentState?.validate() != true) {
       return;
@@ -57,29 +61,30 @@ class _SignupScreenState extends State<SignupScreen> {
       _isLoading = true;
     });
 
-    String res = await AuthMethods().signUpUser(
+    Map<String, dynamic> result = await AuthMethods().signUpUser(
       email: _emailController.text,
       username: _usernameController.text,
       password: _passController.text,
       bio: _bioController.text,
       file: _image!,
     );
-
+    
     // if string returned is success, user has been created
-    if (res == "success") {
+    if (result["res"] == "success" && result["user"] != null) {
+      context.read<UserProvider>().setUser(result["user"]);
       setState(() {
         _isLoading = false;
         // Navigate to feed_screen.dart
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const FeedScreen()),
+          MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
         );
       });
     } else {
       setState(() {
         _isLoading = false;
       });
-      showSnackBar(context, res);
+      showSnackBar(context, result["res"]);
     }
   }
 
@@ -225,7 +230,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 const SizedBox(height: 24),
                 InkWell(
-                  onTap: signUpUser,
+                  onTap: () => signUpUser(context),
                   child: Container(
                     child: _isLoading
                         ? const Center(

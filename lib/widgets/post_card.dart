@@ -31,8 +31,8 @@ class _PostCardState extends State<PostCard> {
 
   @override
   void initState() {
-    super.initState();
     getComments();
+    super.initState();
   }
 
   void getComments() async{
