@@ -150,7 +150,6 @@ class FirestoreMethods {
       }
       await _firestore.collection('posts').doc(postId).delete();
       res = 'success';
-      return postId;
     } catch (err) {
       res = err.toString();
     }
