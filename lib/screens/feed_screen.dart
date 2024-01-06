@@ -36,7 +36,7 @@ class FeedScreen extends StatelessWidget {
       ),
       body: StreamBuilder(
         //using streambuilder to listen to the real time database
-        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        stream: FirebaseFirestore.instance.collection('posts').orderBy('datePublished' , descending: true).snapshots(),
         //we are not using get because this is realtime database (using snapshot) and we are not using .doc(id) cuz we want all the documents
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
