@@ -153,7 +153,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               backgroundColor: mobileBackgroundColor,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () {},
+                onPressed: ClearImage,
               ),
               title: const Text('Post to'),
               centerTitle: false,
@@ -186,7 +186,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   children: [
                     CircleAvatar(
                       backgroundImage: NetworkImage(
-                          'https://plus.unsplash.com/premium_photo-1700124504129-02393b281f06?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                      context.read<UserProvider>().getUser.photoUrl
+                      ),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
@@ -203,6 +204,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       height: 45,
                       width: 45,
                       child: AspectRatio(
+                        //Maintains the aspect ratio of the image preview container.
                         aspectRatio: 487 / 451,
                         child: Container(
                           decoration: BoxDecoration(

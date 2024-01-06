@@ -48,8 +48,12 @@ class _PostCardState extends State<PostCard> {
    });
   }
   Future<void> DeletepostFun(BuildContext context) async {
-     QuerySnapshot snap2 = await FirebaseFirestore.instance
+    //getting the comments of this specific post from firebase
+     QuerySnapshot comments = await FirebaseFirestore.instance
                  .collection('posts').doc(widget.snap['postId']).collection('comments').get();
+
+                DocumentSnapshot gettingDeletedPost =  await FirebaseFirestore.instance
+                 .collection('posts').doc(widget.snap['postId']).get();
                 String deleteResult = await FirestoreMethods().deletePost( widget.snap['postId']);
                 if (deleteResult == 'success') {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -58,7 +62,7 @@ class _PostCardState extends State<PostCard> {
                       action: SnackBarAction(
                         label: 'Undo',
                         onPressed: () async {
-                           await FirestoreMethods().restorePost(widget.snap,snap2);
+                           await FirestoreMethods().restorePost(gettingDeletedPost,comments);
                         },
                       ),
                     ),
@@ -117,8 +121,9 @@ IconButton(
           padding: const EdgeInsets.symmetric(vertical: 8),
           shrinkWrap: true,
           children: [
+            if(widget.snap['uid']== context.read<UserProvider>().getUser.uid)
             CustomButton(buttonText: 'Delete', onTapFunction: DeletepostFun,),
-             CustomButton(buttonText: 'Save Post', onTapFunction: DeletepostFun,)
+            CustomButton(buttonText: 'Save Post', onTapFunction: DeletepostFun,)
           ] 
         ),
       ),

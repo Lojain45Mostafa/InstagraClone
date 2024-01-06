@@ -150,6 +150,7 @@ class FirestoreMethods {
       }
       await _firestore.collection('posts').doc(postId).delete();
       res = 'success';
+      return postId;
     } catch (err) {
       res = err.toString();
     }
@@ -158,13 +159,22 @@ class FirestoreMethods {
   }
 
 
-  Future<String> restorePost(Map<String, dynamic> post, QuerySnapshot comments) async {
+  Future<String> restorePost(DocumentSnapshot  post, QuerySnapshot comments) async {
   String res = 'Some error occurred';
   try {
     // Assuming you have a 'posts' collection in Firestore
-    await _firestore.collection('posts').doc(post['postId']).set(post);
+    await _firestore.collection('posts').doc(post.id).set({
+       "datePublished":post['datePublished'],
+       "uid":post['uid'],
+       "profImage":post['profImage'],
+       "username":post['username'],
+       "description":post['description'],
+       "likes":post['likes'],
+       "postId":post['postId'],
+       "postUrl":post['postUrl'],
+    });
     for(var eachOneComment in comments.docs){
-        await _firestore.collection('posts').doc(post['postId']).collection('comments').doc(eachOneComment.id).set({
+        await _firestore.collection('posts').doc(post.id).collection('comments').doc(eachOneComment.id).set({
           //3shan msh 3yzah y generate id gdeed 3yzah yakhod nafs el Id bta3 el adeem 
           "commentId":eachOneComment['commentId'],
           "datePublished":eachOneComment['datePublished'],
@@ -179,4 +189,7 @@ class FirestoreMethods {
   } catch (err) {
     res = err.toString();
   }
+  print (res);
+  return res;
+}
 }
