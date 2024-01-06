@@ -47,8 +47,11 @@ class _FingerPrintState extends State<FingerPrint> {
               ),
               ElevatedButton.icon(
                 onPressed: () async {
+                  // Authenticating using biometrics and storing the result
                   bool auth = await Authentication.authentication();
+                  // Printing whether authentication is successful
                   print("Can authenticate $auth");
+                  // Navigating to the LoginScreen if authentication is successful
                   if (auth) {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => LoginScreen()));
