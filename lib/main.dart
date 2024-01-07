@@ -1,35 +1,22 @@
-import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/api/firebase_api.dart';
 import 'package:instagram/providers/user_provider.dart';
-import 'package:instagram/resources/auth_methods.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
 import 'package:instagram/screens/add_post_screen.dart';
 import 'package:instagram/screens/chat_messages.dart';
 import 'package:instagram/screens/feed_screen.dart';
-// import 'package:instagram/screens/fingerPrint.dart';
+import 'package:instagram/screens/fingerPrint.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
+import 'package:instagram/responsive/mobile_screen_layout.dart';
+import 'package:instagram/responsive/web_screen_layout.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:provider/provider.dart';
-import 'responsive/mobile_screen_layout.dart';
-import 'responsive/web_screen_layout.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
-//   // Ensure that plugin services are initialized so that `availableCameras()`
-//   WidgetsFlutterBinding.ensureInitialized();
-
-// // Obtain a list of the available cameras on the device.
-//   final cameras = await availableCameras();
-
-// // Get a specific camera from the list of available cameras.
-//   final firstCamera = cameras.first;
-//   WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -55,42 +42,34 @@ void main() async {
           create: (_) => UserProvider(),
         ),
       ],
-      child: MyApp()));
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget home = const ResponsiveLayout(
-      mobileScreenLayout: MobileScreenLayout(),
-      webScreenLayout: WebScreenLayout(),
-    );
-    if (context.read<UserProvider>().isLogin() == false) {
-      home = LoginScreen();
-    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Instagram clone',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
+      home: OrientationBuilder(
+        builder: (context, orientation) {
+          Widget home = ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          );
 
-      home: home,
-      // home: ResponsiveLayout(
-      //   mobileScreenLayout: MobileScreenLayout(),
-      //   webScreenLayout: WebScreenLayout(),
-      // ),
+          if (context.read<UserProvider>().isLogin() == false) {
+            home = FingerPrint();
+          }
 
-      // home: SignupScreen(),
-      // home: LoginScreen(),
-      // home: ChatMessages(),
-      // home: const ChatTestPage(
-      //   receiverUserEmail: 'lojain22@gmail.com',
-      //   receiverUserID: 'Ge74dteyqZN1qFWyUeO8MW3KBiz1',
-      // home: FeedScreen(),
-      // home: AddPostScreen(),
-      // home: FingerPrint(),
-      // ),
+          return home;
+        },
+      ),
     );
   }
 }

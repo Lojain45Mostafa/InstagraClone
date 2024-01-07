@@ -50,10 +50,16 @@ dependencies:
   path_provider: ^2.1.1
   provider: ^6.1.1
   riverpod: ^2.4.9
+
+  html_unescape: ^2.0.0
+  http: ^0.13.0
+  translator: ^0.1.7
   uuid: ^4.2.2
 
 dev_dependencies:
   camera: ^0.10.5+7
+  firebase_messaging: ^14.7.10
+  flutter_file_downloader: ^1.2.1
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter

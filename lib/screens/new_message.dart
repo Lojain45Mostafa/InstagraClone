@@ -67,18 +67,28 @@ class _NewMessageState extends State<NewMessage> {
     }
 
     // send to Firebase
-    final user = FirebaseAuth.instance.currentUser!;
-    final userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get();
-
-    await FirebaseFirestore.instance.collection('chat').add({
-      'text': enteredMessage,
-      'createdAt': Timestamp.now(),
-      'userId': user.uid,
-      'username': userData.data()!['username'],
-      'userImage': userData.data()!['image_url'],
+    // final sender = FirebaseAuth.instance.currentUser!;
+    // final userData = await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(sender.uid)
+    //     .get();
+    model.User sender = widget.room.sender;
+    model.User receiver = widget.room.receiver;
+    if (context.read<UserProvider>().getUser.uid == widget.room.receiver.uid) {
+      sender = widget.room.receiver;
+      receiver = widget.room.sender;
+    }
+    await FirebaseFirestore.instance
+        .collection('chat_room')
+        .doc(widget.room.id)
+        .collection('messages')
+        .doc()
+        .set({
+      'message': enteredMessage,
+      'date': Timestamp.now(),
+      'receiverId': receiver.uid,
+      'senderId': sender.uid,
+      'imageUrl': "image",
     });
 
     _messageController.clear();
@@ -127,43 +137,43 @@ class _NewMessageState extends State<NewMessage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: FutureBuilder<List<Message>>(
-                future: ChatService.getMessagesByChatRoom(widget.room.id),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    List<Message> chatMessages = snapshot.data!;
-                    return ListView.builder(
-                        itemCount: chatMessages.length,
-                        itemBuilder: (context, index) {
-                          final isMe = chatMessages[index].sender.uid ==
-                              FirebaseAuth.instance.currentUser?.uid;
-                          Message? prevMessage = null;
-                          if (index > 0) {
-                            prevMessage = chatMessages[index - 1];
+            FutureBuilder<List<Message>>(
+              future: ChatService.getMessagesByChatRoom(widget.room.id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else {
+                  List<Message> chatMessages = snapshot.data!;
+
+                  return Expanded(
+                      child: ListView.builder(
+                          itemCount: chatMessages.length,
+                          itemBuilder: (context, index) {
+                            final isMe = chatMessages[index].sender.uid ==
+                                FirebaseAuth.instance.currentUser?.uid;
+                            Message? prevMessage = null;
+                            if (index > 0) {
+                              prevMessage = chatMessages[index - 1];
+                            }
+                            // if (index == 0 || (index > 0 && index < chatMessages.length)) {
+                            return MessageBubble.first(
+                              username: chatMessages[index].sender.username,
+                              photoURL: chatMessages[index].sender.photoUrl,
+                              message: chatMessages[index].message,
+                              isMe: isMe,
+                              prevMessage: prevMessage,
+                            );
                           }
-                          // if (index == 0 || (index > 0 && index < chatMessages.length)) {
-                          return MessageBubble.first(
-                            username: chatMessages[index].sender.username,
-                            photoURL: chatMessages[index].sender.photoUrl,
-                            message: chatMessages[index].message,
-                            isMe: isMe,
-                            prevMessage: prevMessage,
-                          );
-                        }
-                        // else {
-                        //   return MessageBubble.next(
-                        //     message: chatMessages[index].message,
-                        //     isMe: isMe,
-                        //   );
-                        // }
-                        // },
-                        );
-                  }
-                },
-              ),
+                          // else {
+                          //   return MessageBubble.next(
+                          //     message: chatMessages[index].message,
+                          //     isMe: isMe,
+                          //   );
+                          // }
+                          // },
+                          ));
+                }
+              },
             ),
             SizedBox(height: 16),
             Row(
@@ -178,7 +188,10 @@ class _NewMessageState extends State<NewMessage> {
                 SizedBox(width: 8),
                 IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: _submitMessage,
+                  onPressed: () {
+                    _submitMessage();
+                    setState(() {});
+                  },
                 ),
                 IconButton(
                   icon: Icon(Icons.image),
