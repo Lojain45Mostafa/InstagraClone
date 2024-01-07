@@ -14,53 +14,65 @@ class _FingerPrintState extends State<FingerPrint> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF192359),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Login',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 38,
-                  fontWeight: FontWeight.w800,
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF2B2B2B), Color(0xFF1A1A1A)],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return LinearGradient(
+                      colors: [Colors.purple, Colors.red],
+                    ).createShader(bounds);
+                  },
+                  child: Icon(
+                    Icons.fingerprint,
+                    size: 100,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 28,
-              ),
-              Text(
-                "Use fingerprint to login",
-                style: TextStyle(
-                  color: Colors.white,
+                SizedBox(height: 20),
+                Text(
+                  'Waiting for fingerprint...',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 28,
-              ),
-              Divider(color: Colors.white60),
-              SizedBox(
-                height: 28,
-              ),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  // Authenticating using biometrics and storing the result
-                  bool auth = await Authentication.authentication();
-                  // Printing whether authentication is successful
-                  print("Can authenticate $auth");
-                  // Navigating to the LoginScreen if authentication is successful
-                  if (auth) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()));
-                  }
-                },
-                icon: Icon(Icons.fingerprint),
-                label: Text("Authenticate"),
-              )
-            ],
+                SizedBox(height: 70),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    // Authenticating using biometrics and storing the result
+                    bool auth = await Authentication.authentication();
+                    // Printing whether authentication is successful
+                    print("Can authenticate $auth");
+                    // Navigating to the LoginScreen if authentication is successful
+                    if (auth) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    }
+                  },
+                  icon: Icon(Icons.fingerprint),
+                  label: Text("Authenticate"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(
+                        0xFF004080), // Change this color to your desired button color
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
