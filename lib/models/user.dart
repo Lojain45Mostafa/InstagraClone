@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class  User{
@@ -12,6 +11,7 @@ class  User{
   final List following;
   final List followers;
 
+  // Constructor
   const User({
     required this.email,
     required this.uid,
@@ -23,7 +23,8 @@ class  User{
   });
 
 //function will take a document snapshot and return user model
-//we did this here once because we are gonna use it again so we don't have to do it ecerytime we will just call it
+// This function allows conversion of a Firestore document to a User object
+//we did this here once because we are gonna use it again so we don't have to do it everytime we will just call it
 static User fromSnap(DocumentSnapshot snap){
   var snapshot = snap.data() as Map<String,dynamic>;
 
@@ -40,6 +41,7 @@ static User fromSnap(DocumentSnapshot snap){
 
 
   //this method will convert whatever user object we require from here to an object
+ // Method to convert a User object to a Map for JSON serialization
   Map<String,dynamic> toJson() =>{
     "username": username,
     "uid": uid,

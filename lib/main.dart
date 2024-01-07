@@ -4,7 +4,7 @@ import 'package:instagram/responsive/responsive_layout_screens.dart';
 import 'package:instagram/screens/add_post_screen.dart';
 import 'package:instagram/screens/chat_messages.dart';
 import 'package:instagram/screens/feed_screen.dart';
-// import 'package:instagram/screens/fingerPrint.dart';
+import 'package:instagram/screens/fingerPrint.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/responsive/mobile_screen_layout.dart';
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           );
 
           if (context.read<UserProvider>().isLogin() == false) {
-            home = LoginScreen();
+            home = FingerPrint();
           }
 
           return home;
