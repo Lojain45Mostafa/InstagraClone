@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/api/firebase_api.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/resources/auth_methods.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
@@ -32,6 +33,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotifications();
   // initialise app based on platform- web or mobile
   // if (kIsWeb) {
   //   await Firebase.initializeApp(
