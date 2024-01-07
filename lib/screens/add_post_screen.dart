@@ -90,6 +90,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   XFile file = await pickImage(
                     ImageSource.camera,
                   );
+                  StorageMethods storageMethods = StorageMethods();
+                  await storageMethods.uploadImageToFirebaseStorage(
+                      "testing", file, true);
                   setState(() {
                     _file = file;
                   });
@@ -106,7 +109,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
                   StorageMethods storageMethods = StorageMethods();
                   await storageMethods.uploadImageToFirebaseStorage(
-                      "testingImages", file, true);
+                      "testing", file, true);
                   setState(() {
                     _file = file;
                   });
