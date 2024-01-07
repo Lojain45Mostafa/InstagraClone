@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/screens/Profile_screen.dart';
 import 'package:intl/intl.dart';
 
 class CommentCard extends StatefulWidget {
@@ -25,9 +26,18 @@ class _CommentCardState extends State<CommentCard> {
       padding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
       child: Row(
         children: [
-          CircleAvatar(
+          InkWell(
+           onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Profile(
+                        uid: widget.snap['uid'],
+                      ),
+                    ),
+                  ),
+          child : CircleAvatar(
             backgroundImage: NetworkImage(profilePic),
             radius: 18,
+          ),
           ),
           Expanded(
             child: Padding(

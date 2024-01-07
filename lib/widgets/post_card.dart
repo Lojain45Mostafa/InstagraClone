@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/resources/notifications_methods.dart';
+import 'package:instagram/screens/Profile_screen.dart';
 import 'package:instagram/screens/comments_screen.dart';
 import 'package:instagram/utils/colors.dart';
+import 'package:instagram/utils/translator.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/buttons.dart';
 import 'package:instagram/widgets/like_animation.dart';
@@ -28,6 +30,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  String translatedText = '';
   bool isLikeAnimating = false;
   int commentLen = 0;
 
@@ -121,13 +124,24 @@ class _PostCardState extends State<PostCard> {
                 .copyWith(right: 0),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(
-                    //getting the profile picture of whoever posted this post
-                    widget.snap['profImage'].toString(),
+
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Profile(
+                        uid: widget.snap['uid'],
+                      ),
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundImage: NetworkImage(
+                      //getting the profile picture of whoever posted this post
+                      widget.snap['profImage'].toString(),
+                    ),
                   ),
                 ),
+
                 SizedBox(
                     width:
                         12), // Add space between the CircleAvatar and the username
@@ -158,6 +172,7 @@ class _PostCardState extends State<PostCard> {
                               CustomButton(
                                 buttonText: 'Save Post',
                                 onTapFunction: SaveLocally,
+
                               )
                             ]),
                       ),
@@ -307,22 +322,47 @@ class _PostCardState extends State<PostCard> {
                   padding: const EdgeInsets.only(
                     top: 8,
                   ),
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(color: primaryColor),
-                      children: [
-                        TextSpan(
-                          text: widget.snap['username'].toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(color: primaryColor),
+                              children: [
+                                TextSpan(
+                                  text: widget.snap['username'].toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  //The ${} syntax is used to embed the value of widget.snap[''] into the text
+                                  text: ' ${widget.snap['description']}',
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          //The ${} syntax is used to embed the value of widget.snap[''] into the text
-                          text: ' ${widget.snap['description']}',
-                        ),
-                      ],
-                    ),
+                          InkWell(
+                            child: TextButton(
+                                onPressed: () async {
+                                  String translated =
+                                      await TranslationApi.translate2(
+                                          widget.snap['description'],
+                                          'en',
+                                          'ar');
+                                  setState(() {
+                                    translatedText = translated;
+                                  });
+                                },
+                                child: Text('see translation')),
+                          )
+                        ],
+                      ),
+                      Text(translatedText),
+                    ],
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
