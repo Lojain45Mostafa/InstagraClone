@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
+import 'package:instagram/screens/add_post_screen.dart';
+import 'package:instagram/screens/chat_messages.dart';
+import 'package:instagram/screens/feed_screen.dart';
+// import 'package:instagram/screens/fingerPrint.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/responsive/mobile_screen_layout.dart';
