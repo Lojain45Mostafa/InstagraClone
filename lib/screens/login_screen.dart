@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: "Enter your password",
                 textInputType: TextInputType.text,
                 isPass: true,
-                obscureText: false,
+                obscureText: false, //used to hide sensetive info
               ), // Display a text input field for the password.
               const SizedBox(height: 64),
               InkWell(

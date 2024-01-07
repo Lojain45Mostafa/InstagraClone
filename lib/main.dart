@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/api/firebase_api.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/resources/auth_methods.dart';
 import 'package:instagram/responsive/responsive_layout_screens.dart';
@@ -18,6 +19,7 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
 //   // Ensure that plugin services are initialized so that `availableCameras()`
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +34,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotifications();
   // initialise app based on platform- web or mobile
   // if (kIsWeb) {
   //   await Firebase.initializeApp(
