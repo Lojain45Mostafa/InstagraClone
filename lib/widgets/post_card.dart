@@ -66,6 +66,8 @@ class _PostCardState extends State<PostCard> {
         print(file);
       },
     );
+    showSnackBar(context, "Image Saved Sucessfully");
+    Navigator.pop(context);
   }
 
   Future<void> DeletepostFun(BuildContext context) async {
