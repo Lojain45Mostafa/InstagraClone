@@ -53,10 +53,7 @@ dependencies:
   html_unescape: ^2.0.0
   http: ^0.13.0
   translator: ^0.1.7
-
-
   uuid: ^4.2.2
-
 
 dev_dependencies:
   camera: ^0.10.5+7
