@@ -7,6 +7,7 @@ import 'package:instagram/responsive/responsive_layout_screens.dart';
 import 'package:instagram/screens/add_post_screen.dart';
 import 'package:instagram/screens/chat_messages.dart';
 import 'package:instagram/screens/feed_screen.dart';
+// import 'package:instagram/screens/fingerPrint.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/screens/signup_screen.dart';
 import 'package:instagram/utils/colors.dart';
@@ -78,13 +79,14 @@ class MyApp extends StatelessWidget {
       // ),
 
       // home: SignupScreen(),
-      //  home: LoginScreen(),
+      // home: LoginScreen(),
       // home: ChatMessages(),
       // home: const ChatTestPage(
       //   receiverUserEmail: 'lojain22@gmail.com',
       //   receiverUserID: 'Ge74dteyqZN1qFWyUeO8MW3KBiz1',
       // home: FeedScreen(),
       // home: AddPostScreen(),
+      // home: FingerPrint(),
       // ),
     );
   }

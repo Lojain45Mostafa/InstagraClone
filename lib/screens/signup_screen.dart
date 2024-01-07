@@ -68,7 +68,7 @@ class _SignupScreenState extends State<SignupScreen> {
       bio: _bioController.text,
       file: _image!,
     );
-    
+
     // if string returned is success, user has been created
     if (result["res"] == "success" && result["user"] != null) {
       context.read<UserProvider>().setUser(result["user"]);
@@ -107,188 +107,191 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          padding:
-              const EdgeInsets.only(top: 12, left: 12, right: 12, bottom: 8),
-          width: double.infinity,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: Container(),
-                ),
-                SvgPicture.asset(
-                  'assets/ic_instagram.svg',
-                  color: Colors.white, // Adjust the color
-                  height: 64,
-                ),
-                const SizedBox(height: 32),
-                Stack(
-                  children: [
-                    _image != null
-                        ? CircleAvatar(
-                            radius: 64,
-                            backgroundImage: FileImage(File(_image!.path)),
-                            backgroundColor: Colors.red,
-                          )
-                        : const CircleAvatar(
-                            radius: 64,
-                            backgroundImage: NetworkImage(
-                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLorGAuZfVX3ZCV_Pz0QZlcOvXzPHKELhVPA&usqp=CAU',
+      body: ListView(scrollDirection: Axis.vertical, children: [
+        SafeArea(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            padding:
+                const EdgeInsets.only(top: 12, left: 12, right: 12, bottom: 8),
+            width: double.infinity,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Container(),
+                  ),
+                  SvgPicture.asset(
+                    'assets/ic_instagram.svg',
+                    color: Colors.white, // Adjust the color
+                    height: 64,
+                  ),
+                  const SizedBox(height: 32),
+                  Stack(
+                    children: [
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 64,
+                              backgroundImage: FileImage(File(_image!.path)),
+                              backgroundColor: Colors.red,
+                            )
+                          : const CircleAvatar(
+                              radius: 64,
+                              backgroundImage: NetworkImage(
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLorGAuZfVX3ZCV_Pz0QZlcOvXzPHKELhVPA&usqp=CAU',
+                              ),
+                              backgroundColor: Colors.red,
                             ),
-                            backgroundColor: Colors.red,
+                      Positioned(
+                        bottom: -10,
+                        left: 80,
+                        child: IconButton(
+                          onPressed: selectImage,
+                          icon: const Icon(Icons.add_a_photo),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+                  TextFieldInput(
+                    textEditingController: _usernameController,
+                    hintText: "Enter your username",
+                    textInputType: TextInputType.text,
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 24),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      hintText: "Enter your email",
+                      filled: true,
+                      fillColor: Colors.grey[750], // Set the background color
+                      contentPadding: const EdgeInsets.all(12),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none, // Remove the border
+                        borderRadius:
+                            BorderRadius.circular(12), // Set the border radius
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      errorStyle: TextStyle(color: Colors.red),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null ||
+                          value.trim().isEmpty ||
+                          !value.contains('@')) {
+                        return 'Please enter a valid email address.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  TextFormField(
+                    controller: _passController,
+                    decoration: InputDecoration(
+                      hintText: "Enter your passwrod",
+                      filled: true,
+                      fillColor: Colors.grey[750], // Set the background color
+                      contentPadding: const EdgeInsets.all(12),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none, // Remove the border
+                        borderRadius:
+                            BorderRadius.circular(12), // Set the border radius
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      errorStyle: TextStyle(color: Colors.red),
+                    ),
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a password.';
+                      } else if (value.length < 8) {
+                        return 'Password must be at least 8 characters.';
+                      } else if (!containsUpperCase(value) ||
+                          !containsLowerCase(value)) {
+                        return 'Password must contain both uppercase and lowercase characters.';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  TextFieldInput(
+                    textEditingController: _bioController,
+                    hintText: "Enter your bio",
+                    textInputType: TextInputType.text,
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 24),
+                  InkWell(
+                    onTap: () => signUpUser(context),
+                    child: Container(
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
+                            )
+                          : const Text('Sign Up'),
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: const ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
                           ),
-                    Positioned(
-                      bottom: -10,
-                      left: 80,
-                      child: IconButton(
-                        onPressed: selectImage,
-                        icon: const Icon(Icons.add_a_photo),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 32),
-                TextFieldInput(
-                  textEditingController: _usernameController,
-                  hintText: "Enter your username",
-                  textInputType: TextInputType.text,
-                  obscureText: false,
-                ),
-                const SizedBox(height: 24),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: "Enter your email",
-                    filled: true,
-                    fillColor: Colors.grey[750], // Set the background color
-                    contentPadding: const EdgeInsets.all(12),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none, // Remove the border
-                      borderRadius:
-                          BorderRadius.circular(12), // Set the border radius
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    errorStyle: TextStyle(color: Colors.red),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null ||
-                        value.trim().isEmpty ||
-                        !value.contains('@')) {
-                      return 'Please enter a valid email address.';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                TextFormField(
-                  controller: _passController,
-                  decoration: InputDecoration(
-                    hintText: "Enter your passwrod",
-                    filled: true,
-                    fillColor: Colors.grey[750], // Set the background color
-                    contentPadding: const EdgeInsets.all(12),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none, // Remove the border
-                      borderRadius:
-                          BorderRadius.circular(12), // Set the border radius
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    errorStyle: TextStyle(color: Colors.red),
-                  ),
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a password.';
-                    } else if (value.length < 8) {
-                      return 'Password must be at least 8 characters.';
-                    } else if (!containsUpperCase(value) ||
-                        !containsLowerCase(value)) {
-                      return 'Password must contain both uppercase and lowercase characters.';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                TextFieldInput(
-                  textEditingController: _bioController,
-                  hintText: "Enter your bio",
-                  textInputType: TextInputType.text,
-                  obscureText: false,
-                ),
-                const SizedBox(height: 24),
-                InkWell(
-                  onTap: () => signUpUser(context),
-                  child: Container(
-                    child: _isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: primaryColor,
-                            ),
-                          )
-                        : const Text('Sign Up'),
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
                         ),
+                        color: Colors.blue, // Adjust the color
                       ),
-                      color: Colors.blue, // Adjust the color
+                      // child: const Text('Sign Up'),
                     ),
-                    // child: const Text('Sign Up'),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Flexible(
-                  flex: 2,
-                  child: Container(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: const Text("Already have an Account?"),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle adding a new chat
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
-                        );
-                      },
-                      child: Container(
+                  const SizedBox(height: 12),
+                  Flexible(
+                    flex: 2,
+                    child: Container(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: const Text(
-                          "  Login",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        child: const Text("Already have an Account?"),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Handle adding a new chat
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: const Text(
+                            "  Login",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      ]),
     );
   }
 }
