@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/resources/firestore_methods.dart';
@@ -15,6 +17,7 @@ import 'package:instagram/models/user.dart' as model;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:instagram/models/notifications.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -52,6 +55,22 @@ class _PostCardState extends State<PostCard> {
     setState(() {
       //to see the comment length
     });
+  }
+
+  Future<void> SaveLocally(BuildContext context) async {
+    String url = widget.snap['postUrl'].toString();
+    FileDownloader.downloadFile(
+      url: url,
+      onDownloadError: (String error) {
+        print('Error downloading: $error');
+      },
+      onDownloadCompleted: (path) {
+        final File file = File(path);
+        print(file);
+      },
+    );
+    showSnackBar(context, "Image Saved Sucessfully");
+    Navigator.pop(context);
   }
 
   Future<void> DeletepostFun(BuildContext context) async {
@@ -105,6 +124,7 @@ class _PostCardState extends State<PostCard> {
                 .copyWith(right: 0),
             child: Row(
               children: [
+
                 InkWell(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -151,7 +171,8 @@ class _PostCardState extends State<PostCard> {
                                 ),
                               CustomButton(
                                 buttonText: 'Save Post',
-                                onTapFunction: DeletepostFun,
+                                onTapFunction: SaveLocally,
+
                               )
                             ]),
                       ),
@@ -301,6 +322,7 @@ class _PostCardState extends State<PostCard> {
                   padding: const EdgeInsets.only(
                     top: 8,
                   ),
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
