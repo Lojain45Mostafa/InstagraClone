@@ -242,7 +242,7 @@ packages:
     source: hosted
     version: "2.10.0"
   firebase_messaging:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: firebase_messaging
       sha256: "980259425fa5e2afc03e533f33723335731d21a56fd255611083bceebf4373a8"
