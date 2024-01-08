@@ -40,7 +40,7 @@ class _ChatMessagesState extends State<ChatMessages> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(
-                context); // ;This will navigate back to the previous screen (FeedScreen)
+                context); //This will navigate back to the previous screen (FeedScreen)
           },
         ),
         actions: [
@@ -59,7 +59,7 @@ class _ChatMessagesState extends State<ChatMessages> {
       ),
       body: FutureBuilder<List<ChatRoom>>(
         // rebuilds UI whenver the data is received
-        // Listen to the stream of messages
+        // Listen to the 7. of messages
         future: ChatService.getAllChatRoomsById(
             context.read<UserProvider>().getUser.uid),
         builder: (ctx, chatSnapshots) {

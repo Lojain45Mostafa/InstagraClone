@@ -1,12 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/models/chatRoom.dart';
+import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/resources/firestore_methods.dart';
+import 'package:instagram/screens/new_message.dart';
+import 'package:instagram/services/chatTest_service.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/follow_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/screens/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   final String uid;
@@ -84,6 +89,19 @@ class _ProfileState extends State<Profile> {
                 title: Text(userData['username']),
                 centerTitle: false,
                 actions: [
+
+                  IconButton(
+                    onPressed: () async {
+                      ChatRoom room = await ChatService.createChatRoom(
+                          context.read<UserProvider>().getUser.uid, widget.uid);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewMessage(
+                                  room: room, reciever: room.receiver)));
+                    },
+                    icon: const Icon(Icons.messenger_outline),
+                  ),
                   IconButton(
                     onPressed: () {
                       FirebaseAuth.instance.signOut();

@@ -13,7 +13,7 @@ import 'package:instagram/widgets/text_field_input.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:provider/provider.dart'; // bast5demha 34an a3rf ast5dem File el fel image picker aslun el import da byst5dem 34an el I/O operation w menhom el files
+import 'package:provider/provider.dart'; //The provider package helps manage the state of your application in a clean and efficient way. Flutter applications often need to manage state, such as user authentication status, user data, or UI-related state.
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -127,7 +127,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     'assets/logo(final).png',
                     height: 150,
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
                   Stack(
                     children: [
                       _image != null
