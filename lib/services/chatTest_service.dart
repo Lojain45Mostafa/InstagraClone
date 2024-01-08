@@ -143,4 +143,35 @@ class ChatService extends ChangeNotifier {
     }
     return [];
   }
+
+  static Future<ChatRoom?> getChatRoomByUserDetails(
+      String senderId, String receiverId) async {
+    var query = await fireStore
+        .collection('chat_room')
+        .where("senderId", isEqualTo: senderId)
+        .where("receiverId", isEqualTo: receiverId)
+        .limit(1)
+        .get();
+    if (query.docs.isEmpty) {
+      return null;
+    }
+    var first = query.docs.first;
+    ChatRoom room = await getChatRoomById(first.id);
+    return room;
+  }
+
+  static Future<ChatRoom> createChatRoom(
+      String senderId, String receiverId) async {
+    ChatRoom? room = await getChatRoomByUserDetails(senderId, receiverId);
+    if (room != null) {
+      return room;
+    }
+
+    DocumentReference docRef = fireStore.collection("chat_room").doc();
+    await docRef.set({"receiverId": receiverId, "senderId": senderId});
+    var emptyDocRef = docRef.collection("messages").doc('empty_document');
+    await emptyDocRef.set({});
+    ChatRoom chatroom = await getChatRoomById(docRef.id);
+    return chatroom;
+  }
 }

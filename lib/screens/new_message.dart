@@ -97,7 +97,7 @@ class _NewMessageState extends State<NewMessage> {
 
   selectImage() async {
     XFile im = await pickImage(ImageSource.gallery);
-    // set state because we need to display the image we selected on the circle avatar
+    // set state because we need to display the image we selected
     setState(() {
       _image = im;
     });
