@@ -45,6 +45,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         uid,
         username,
         profImage,
+        _pickedLocation,
       );
 
       if (res == 'success') {
@@ -227,10 +228,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
                 Container(
                   child: LocationInput(
-                    // Add the LocationInput widget here
-                    key:
-                        UniqueKey(), // You can use a UniqueKey to force the widget to rebuild
-                  ),
+                      key: UniqueKey(),
+                      onLocationSelected: (PlaceLocation location) {
+                        setState(() {
+                          _pickedLocation = location;
+                        });
+                      }),
                 ),
               ],
             ),

@@ -90,7 +90,7 @@ class _PostCardState extends State<PostCard> {
     if (deleteResult == 'success') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Post deleted'),
+          content: const Text('Post deleted'),
           action: SnackBarAction(
             label: 'Undo',
             onPressed: () async {
@@ -102,7 +102,7 @@ class _PostCardState extends State<PostCard> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Deletion failed'),
         ),
       );
@@ -115,16 +115,15 @@ class _PostCardState extends State<PostCard> {
     final model.User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [
           //Header section
           Container(
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16)
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16)
                 .copyWith(right: 0),
             child: Row(
               children: [
-
                 InkWell(
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -141,18 +140,26 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-
-                SizedBox(
+                const SizedBox(
                     width:
                         12), // Add space between the CircleAvatar and the username
                 Text(
                   widget.snap['username'].toString(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Spacer(),
-                IconButton(
+                if (widget.snap['location'] != null)
+                      Expanded( child:Text(
+                        widget.snap['location']['address'] ?? '',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      ),
+                const Spacer(),
+                IconButton( 
                   onPressed: () async {
                     String postId = widget.snap['postId']; // Extracting postId
                     // Show the 'Delete' option when the three dots are clicked
@@ -172,7 +179,6 @@ class _PostCardState extends State<PostCard> {
                               CustomButton(
                                 buttonText: 'Save Post',
                                 onTapFunction: SaveLocally,
-
                               )
                             ]),
                       ),
@@ -185,6 +191,7 @@ class _PostCardState extends State<PostCard> {
               ],
             ),
           ),
+          
           //image section
           GestureDetector(
             onDoubleTap: () async {
@@ -208,35 +215,35 @@ class _PostCardState extends State<PostCard> {
                     fit: BoxFit.cover,
                   ),
                 ),
-    //               child: Stack(
-    // alignment: Alignment.center,
-    // children: [
-    //   SizedBox(
-    //     height: MediaQuery.of(context).size.height * 0.35,
-    //     width: double.infinity,
-    //     child: Image.network(
-    //       widget.snap['postUrl'].toString(),
-    //       fit: BoxFit.cover,
-    //       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-    //         if (loadingProgress == null) {
-    //           return child;
-    //         } else {
-    //           return Center(
-    //             child: CircularProgressIndicator(
-    //               value: loadingProgress.expectedTotalBytes != null
-    //                   ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-    //                   : null,
-    //             ),
-    //           );
-    //         }
-    //       },
-    //       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-    //         return Center(
-    //           child: Icon(Icons.error),
-    //         );
-    //       },
-    //     ),
-    //   ),
+                //               child: Stack(
+                // alignment: Alignment.center,
+                // children: [
+                //   SizedBox(
+                //     height: MediaQuery.of(context).size.height * 0.35,
+                //     width: double.infinity,
+                //     child: Image.network(
+                //       widget.snap['postUrl'].toString(),
+                //       fit: BoxFit.cover,
+                //       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                //         if (loadingProgress == null) {
+                //           return child;
+                //         } else {
+                //           return Center(
+                //             child: CircularProgressIndicator(
+                //               value: loadingProgress.expectedTotalBytes != null
+                //                   ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                //                   : null,
+                //             ),
+                //           );
+                //         }
+                //       },
+                //       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                //         return Center(
+                //           child: Icon(Icons.error),
+                //         );
+                //       },
+                //     ),
+                //   ),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: isLikeAnimating ? 1 : 0,
@@ -276,13 +283,13 @@ class _PostCardState extends State<PostCard> {
                           senderID: context.read<UserProvider>().getUser.uid,
                           receiverID: widget.snap["uid"],
                           postID: widget.snap["postId"],
-                          typeID: "5ds9o3g3tG4x81i44rs7");
+                          typeID: "74NYV3ZhA9TG9Brx4n3I");
                     } else {
                       await NotificationsMethods.deleteNotificationByDetails(
                           context.read<UserProvider>().getUser.uid,
                           widget.snap["uid"],
                           widget.snap["postId"],
-                          "5ds9o3g3tG4x81i44rs7");
+                          "74NYV3ZhA9TG9Brx4n3I");
                     }
                   },
                   icon: widget.snap['likes'].contains(user.uid)
@@ -351,7 +358,6 @@ class _PostCardState extends State<PostCard> {
                   padding: const EdgeInsets.only(
                     top: 8,
                   ),
-
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -386,7 +392,7 @@ class _PostCardState extends State<PostCard> {
                                     translatedText = translated;
                                   });
                                 },
-                                child: Text('see translation')),
+                                child: const Text('see translation')),
                           )
                         ],
                       ),
@@ -437,7 +443,7 @@ class _PostCardState extends State<PostCard> {
                       );
                     }
 
-                    return SizedBox(); // Return an empty widget or handle other states
+                    return const SizedBox(); // Return an empty widget or handle other states
                   },
                 ),
                 Container(
@@ -452,7 +458,9 @@ class _PostCardState extends State<PostCard> {
               ],
             ),
           ),
+          
         ],
+        
       ),
     );
   }

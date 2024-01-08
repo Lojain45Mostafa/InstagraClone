@@ -59,4 +59,20 @@ class NotificationsMethods {
       print('Error deleting notification: $e');
     }
   }
+   static Future<void> restoreNotification(Notifications notification) async {
+    try {
+      // Assuming you have a Firestore collection named 'notifications'
+      CollectionReference notificationsCollection =
+          FirebaseFirestore.instance.collection('notifications');
+
+      // Add the notification back to the Firestore collection
+      await notificationsCollection.add(notification.toJson());
+
+      // Print a message or handle success as needed
+      print('Notification restored successfully');
+    } catch (e) {
+      // Handle errors, e.g., show an error message
+      print('Error restoring notification: $e');
+    }
+  }
 }
