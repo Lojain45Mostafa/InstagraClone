@@ -44,38 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCTNFGUcZYIRFbRM26VP799afZ68SX_puA',
-    appId: '1:257455787498:web:d1195223840b4598f2f693',
-    messagingSenderId: '257455787498',
-    projectId: 'instagram-project-871da',
-    authDomain: 'instagram-project-871da.firebaseapp.com',
-    storageBucket: 'instagram-project-871da.appspot.com',
-    measurementId: 'G-1JK8CZWGFP',
+    apiKey: 'AIzaSyCAdOMklaIXmrXTe_LmH8OGuPkTLCORcLc',
+    appId: '1:832052160615:web:d554c951fec1e5b6718cc2',
+    messagingSenderId: '832052160615',
+    projectId: 'instatwo-e6170',
+    authDomain: 'instatwo-e6170.firebaseapp.com',
+    storageBucket: 'instatwo-e6170.appspot.com',
+    measurementId: 'G-5EB3PGRCJW',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCq7Sk-bFCy_v0s1G778NptPt2mnp44ak8',
-    appId: '1:257455787498:android:48cd7a3b42eda970f2f693',
-    messagingSenderId: '257455787498',
-    projectId: 'instagram-project-871da',
-    storageBucket: 'instagram-project-871da.appspot.com',
+    apiKey: 'AIzaSyCrOI5PiqBDOidAxu_fsUQ7YR_F797c_MI',
+    appId: '1:832052160615:android:01c33190553b0b43718cc2',
+    messagingSenderId: '832052160615',
+    projectId: 'instatwo-e6170',
+    storageBucket: 'instatwo-e6170.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCKf9s-xJPD2Kpa_muq9x7KQHKWUUPlOos',
-    appId: '1:257455787498:ios:f57f4b18b1969360f2f693',
-    messagingSenderId: '257455787498',
-    projectId: 'instagram-project-871da',
-    storageBucket: 'instagram-project-871da.appspot.com',
+    apiKey: 'AIzaSyBhA7k2-93otqt-3CBWw-uhW0oSsUKoVFg',
+    appId: '1:832052160615:ios:68a877d845ab58b6718cc2',
+    messagingSenderId: '832052160615',
+    projectId: 'instatwo-e6170',
+    storageBucket: 'instatwo-e6170.appspot.com',
     iosBundleId: 'com.example.instagram',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCKf9s-xJPD2Kpa_muq9x7KQHKWUUPlOos',
-    appId: '1:257455787498:ios:6a56861bfa5aca95f2f693',
-    messagingSenderId: '257455787498',
-    projectId: 'instagram-project-871da',
-    storageBucket: 'instagram-project-871da.appspot.com',
+    apiKey: 'AIzaSyBhA7k2-93otqt-3CBWw-uhW0oSsUKoVFg',
+    appId: '1:832052160615:ios:da26718f007e57ca718cc2',
+    messagingSenderId: '832052160615',
+    projectId: 'instatwo-e6170',
+    storageBucket: 'instatwo-e6170.appspot.com',
     iosBundleId: 'com.example.instagram.RunnerTests',
   );
 }

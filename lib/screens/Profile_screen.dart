@@ -6,6 +6,7 @@ import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/follow_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram/screens/login_screen.dart';
 
 class Profile extends StatefulWidget {
   final String uid;
@@ -80,6 +81,22 @@ class _ProfileState extends State<Profile> {
               backgroundColor: mobileBackgroundColor,
               title: Text(userData['username']),
               centerTitle: false,
+              actions: [
+                  IconButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.exit_to_app,
+                      color: Theme.of(context).colorScheme.primary,
+                    ), // Icon
+                  ),
+                ]
             ),
             body: ListView(
               children: [

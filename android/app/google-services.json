@@ -1,32 +1,13 @@
 {
   "project_info": {
-    "project_number": "257455787498",
-    "project_id": "instagram-project-871da",
-    "storage_bucket": "instagram-project-871da.appspot.com"
+    "project_number": "832052160615",
+    "project_id": "instatwo-e6170",
+    "storage_bucket": "instatwo-e6170.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:257455787498:android:3b2a2e01d7e07a90f2f693",
-        "android_client_info": {
-          "package_name": "Instagram.App"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCq7Sk-bFCy_v0s1G778NptPt2mnp44ak8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:257455787498:android:48cd7a3b42eda970f2f693",
+        "mobilesdk_app_id": "1:832052160615:android:01c33190553b0b43718cc2",
         "android_client_info": {
           "package_name": "com.example.instagram"
         }
@@ -34,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCq7Sk-bFCy_v0s1G778NptPt2mnp44ak8"
+          "current_key": "AIzaSyCrOI5PiqBDOidAxu_fsUQ7YR_F797c_MI"
         }
       ],
       "services": {
