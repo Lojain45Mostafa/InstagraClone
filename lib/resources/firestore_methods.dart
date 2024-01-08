@@ -1,6 +1,5 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:instagram/models/post.dart';
 import 'package:instagram/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
@@ -22,9 +21,12 @@ class FirestoreMethods {
       String photoUrl = await StorageMethods()
           .uploadImageToFirebaseStorage('posts', file, true);
       // we need to await because it will return a future string
+      // Upload the image file to Firebase Storage and get the URL
 
       String postId = const Uuid().v1();
       // v1 makes a unique Id everytime based on time
+
+      // Create a Post object with the provided data
       Post post = Post(
         //passing arguments
         description: description,
@@ -36,6 +38,7 @@ class FirestoreMethods {
         postUrl: photoUrl,
         profImage: profImage,
         likes: [],
+        // Initialize likes with an empty list
       );
 
       //storing posts in firestore
