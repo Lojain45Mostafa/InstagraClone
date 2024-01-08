@@ -79,11 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 flex: 2,
                 child: Container(),
               ),
-              SvgPicture.asset(
-                'assets/ic_instagram.svg',
-                // ignore: deprecated_member_use
-                color: primaryColor,
-                height: 64,
+              Image.asset(
+                'assets/logo(final).png',
+                height: 150,
               ), // Display the Instagram logo using an SVG image.
               const SizedBox(height: 64),
               TextFieldInput(

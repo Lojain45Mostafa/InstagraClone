@@ -35,7 +35,8 @@ void main() async {
   // } else {
   //   await Firebase.initializeApp();
   // }
-  runApp(MultiProvider(
+  runApp(
+    MultiProvider(
       //as our app gets bigger it's gonna use multiple providers so just wrap it with MultiProvider and it's gonna be a one time setup for us
       providers: [
         ChangeNotifierProvider(
@@ -46,7 +47,6 @@ void main() async {
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
           );
 
           if (context.read<UserProvider>().isLogin() == false) {
-            home = FingerPrint();
+            home = SignupScreen();
           }
 
           return home;

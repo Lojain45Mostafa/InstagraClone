@@ -123,10 +123,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     flex: 2,
                     child: Container(),
                   ),
-                  SvgPicture.asset(
-                    'assets/ic_instagram.svg',
-                    color: Colors.white, // Adjust the color
-                    height: 64,
+                  Image.asset(
+                    'assets/logo(final).png',
+                    height: 150,
                   ),
                   const SizedBox(height: 32),
                   Stack(
