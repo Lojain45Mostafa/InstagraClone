@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram/models/place.dart';
 import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/responsive/mobile_screen_layout.dart';
 import 'package:instagram/screens/feed_screen.dart';
@@ -10,6 +11,7 @@ import 'package:instagram/resources/storage_methods.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
 import 'package:instagram/models/user.dart';
+import 'package:instagram/widgets/Location_inputs.dart';
 import 'package:provider/provider.dart';
 import 'package:instagram/providers/user_provider.dart';
 
@@ -24,6 +26,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   XFile? _file;
   final TextEditingController _descriptionController = TextEditingController();
   bool _isLoading = false;
+
+  PlaceLocation? _pickedLocation;
 
   void postImage(
     //they are accepting arguments from here because there is a provider down
@@ -48,7 +52,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           _isLoading = false;
         });
 
-        //Widgets have a property called mounted which indicates whether 
+        //Widgets have a property called mounted which indicates whether
         //they are currently part of the widget tree and thus able to be rendered on the screen.
         //When you check if (context.mounted), you're ensuring that the widget associated with the provided BuildContext
         // is still available and active in the widget tree before performing certain actions
@@ -59,11 +63,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
           );
         }
         ClearImage();
-      // Navigate back to the FeedScreen after posting successfully
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
-      );
+        // Navigate back to the FeedScreen after posting successfully
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
+        );
       } else {
         setState(() {
           _isLoading = false;
@@ -186,8 +190,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   children: [
                     CircleAvatar(
                       backgroundImage: NetworkImage(
-                      context.read<UserProvider>().getUser.photoUrl
-                      ),
+                          context.read<UserProvider>().getUser.photoUrl),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
@@ -218,7 +221,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                     const Divider(),
                   ],
-                )
+                ),
+                Container(
+                  child: LocationInput(
+                    // Add the LocationInput widget here
+                    key:
+                        UniqueKey(), // You can use a UniqueKey to force the widget to rebuild
+                  ),
+                ),
               ],
             ),
           );
