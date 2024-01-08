@@ -49,7 +49,9 @@ class _ProfileState extends State<Profile> {
       //get the count of posts
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
-          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('uid',
+              isEqualTo: widget
+                  .uid) // Use widget.uid instead of FirebaseAuth.instance.currentUser!.uid
           .get();
       postCount = postSnap.docs.length; //get length of list as in num of posts
 /*-------------------------------------------------------------------------------------------*/
@@ -77,11 +79,11 @@ class _ProfileState extends State<Profile> {
           )
         : Scaffold(
             appBar: AppBar(
-              // the upper app bar in the profile page
-              backgroundColor: mobileBackgroundColor,
-              title: Text(userData['username']),
-              centerTitle: false,
-              actions: [
+                // the upper app bar in the profile page
+                backgroundColor: mobileBackgroundColor,
+                title: Text(userData['username']),
+                centerTitle: false,
+                actions: [
                   IconButton(
                     onPressed: () {
                       FirebaseAuth.instance.signOut();
@@ -96,8 +98,7 @@ class _ProfileState extends State<Profile> {
                       color: Theme.of(context).colorScheme.primary,
                     ), // Icon
                   ),
-                ]
-            ),
+                ]),
             body: ListView(
               children: [
                 //elements of the profile page

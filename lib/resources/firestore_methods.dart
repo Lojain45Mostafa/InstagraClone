@@ -1,5 +1,6 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram/models/place.dart';
 import 'package:instagram/models/post.dart';
 import 'package:instagram/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
@@ -15,6 +16,7 @@ class FirestoreMethods {
     String uid,
     String username,
     String profImage,
+    PlaceLocation? location,
   ) async {
     String res = "some error occured";
     try {
@@ -38,6 +40,7 @@ class FirestoreMethods {
         postUrl: photoUrl,
         profImage: profImage,
         likes: [],
+        location: location,
         // Initialize likes with an empty list
       );
 

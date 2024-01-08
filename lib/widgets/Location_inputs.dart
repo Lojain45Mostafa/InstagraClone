@@ -5,7 +5,11 @@ import 'package:location/location.dart';
 import 'dart:convert';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({super.key});
+  final Function(PlaceLocation) onLocationSelected;
+  const LocationInput({
+    Key? key,
+    required this.onLocationSelected,
+  }) : super(key: key);
   @override
   State<LocationInput> createState() {
     return _LocationInputState();
@@ -70,6 +74,7 @@ class _LocationInputState extends State<LocationInput> {
       _isGettingLocation = true;
       image = getLocationImage();
     });
+    widget.onLocationSelected(_pickedLocation!);
   }
 
   @override
