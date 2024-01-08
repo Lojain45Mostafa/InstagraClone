@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram/models/place.dart';
 
 class Post {
   final String description;
@@ -9,6 +10,7 @@ class Post {
   final String postUrl;
   final String profImage;
   final likes;
+  final PlaceLocation? location;
 
   const Post(
       {required this.description,
@@ -19,6 +21,7 @@ class Post {
       required this.datePublished,
       required this.postUrl,
       required this.profImage,
+      required this.location,
       });
 
   static Post fromSnap(DocumentSnapshot snap) {
@@ -32,7 +35,14 @@ class Post {
       datePublished: snapshot["datePublished"],
       username: snapshot["username"],
       postUrl: snapshot['postUrl'],
-      profImage: snapshot['profImage']
+      profImage: snapshot['profImage'],
+      location: snapshot['location'] != null
+          ? PlaceLocation(
+              latitude: snapshot['location']['latitude'],
+              longitude: snapshot['location']['longitude'],
+              address: snapshot['location']['address'],
+            )
+          : null,
     );
   }
 
@@ -44,6 +54,13 @@ class Post {
         "postId": postId,
         "datePublished": datePublished,
         'postUrl': postUrl,
-        'profImage': profImage
+        'profImage': profImage,
+        'location': location != null
+            ? {
+                'latitude': location!.latitude,
+                'longitude': location!.longitude,
+                'address': location!.address,
+              }
+            : null,
       };
 }
