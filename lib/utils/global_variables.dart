@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/screens/Notifications.dart';
 import 'package:instagram/screens/Profile_screen.dart';
@@ -15,7 +16,8 @@ List<Widget> homeScreenItems = [
   const SearchScreen(),
   const AddPostScreen(),
   const Notifications(),
-  const Profile(),
-  const SignupScreen(),
+  Profile(
+    uid: FirebaseAuth.instance.currentUser!.uid,
+  ),
   const LoginScreen()
 ];

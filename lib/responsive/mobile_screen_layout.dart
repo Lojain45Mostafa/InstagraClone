@@ -16,7 +16,7 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
-  String Username ="";
+  String Username = "";
 
   //  void getUsername() async{
   //    DocumentSnapshot snap = await FirebaseFirestore.instance
@@ -26,7 +26,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   //    setState(() {
   //      Username = (snap.data() as Map<String,dynamic>)['username'];
   //    });
-     //go to users users collection and find and we will find by matching id inndocuments and get information   and view it once 
+  //go to users users collection and find and we will find by matching id inndocuments and get information   and view it once
   //  }
 
   int _page = 0;
@@ -60,6 +60,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     // model.User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,
         children: homeScreenItems,
@@ -112,9 +113,3 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     );
   }
 }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
