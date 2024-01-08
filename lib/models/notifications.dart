@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/models/notificationType.dart';
+import 'package:instagram/models/place.dart';
 import 'package:instagram/models/post.dart';
 import 'package:instagram/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,7 +52,16 @@ class Notifications {
         postId: postId,
         datePublished: firebaseTimestamp.toDate(),
         postUrl: snap["postUrl"],
-        profImage: snap["profImage"]);
+        profImage: snap["profImage"],
+        location: snap['location'] != null
+            ? PlaceLocation(
+                latitude: snap['location']['latitude'],
+                longitude: snap['location']['longitude'],
+                address: snap['location']['address'],
+              )
+            : null,
+        );
+        
   }
 
   static Future<NotificationType> GetNotificatioTypeById(String notificationTypeId) async {

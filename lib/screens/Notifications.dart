@@ -72,11 +72,7 @@ class _NotificationsState extends State<Notifications> {
                           label: 'Undo',
                           onPressed: () async {
                             // Restore the removed notification
-                            await model.Notifications.sendNotification(
-                                senderID: "Ge74dteyqZN1qFWyUeO8MW3KBiz1",
-                                receiverID: "UUnNUkznPCcNmMFLbH71v2uptpG2",
-                                postID: "99e08680-fd7a-1e08-82f4-37c53fe15271",
-                                typeID: "5ds9o3g3tG4x81i44rs7");
+                            await NotificationsMethods.restoreNotification(not);
 
                             setState(() {
                               data.insert(index, removedNotification);

@@ -54,7 +54,9 @@ class _ProfileState extends State<Profile> {
       //get the count of posts
       var postSnap = await FirebaseFirestore.instance
           .collection('posts')
-          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('uid',
+              isEqualTo: widget
+                  .uid) // Use widget.uid instead of FirebaseAuth.instance.currentUser!.uid
           .get();
       postCount = postSnap.docs.length; //get length of list as in num of posts
 /*-------------------------------------------------------------------------------------------*/
@@ -87,6 +89,7 @@ class _ProfileState extends State<Profile> {
                 title: Text(userData['username']),
                 centerTitle: false,
                 actions: [
+
                   IconButton(
                     onPressed: () async {
                       ChatRoom room = await ChatService.createChatRoom(
