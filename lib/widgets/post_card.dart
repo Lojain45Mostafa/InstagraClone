@@ -112,6 +112,12 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    String finalLocation = '';
+    if(widget.snap['location'] != null){
+    String location = widget.snap['location']['address'];
+                List<String> places = location.split(",");
+                 finalLocation = places[2];
+    }
     final model.User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
@@ -123,6 +129,7 @@ class _PostCardState extends State<PostCard> {
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16)
                 .copyWith(right: 0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
                   onTap: () => Navigator.of(context).push(
@@ -143,21 +150,26 @@ class _PostCardState extends State<PostCard> {
                 const SizedBox(
                     width:
                         12), // Add space between the CircleAvatar and the username
-                Text(
-                  widget.snap['username'].toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                if (widget.snap['location'] != null)
-                      Expanded( child:Text(
-                        widget.snap['location']['address'] ?? '',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.snap['username'].toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (widget.snap['location'] != null)
+                       Text(
+                        finalLocation ?? '',
                         style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 12,
                         ),
                       ),
-                      ),
+                  ],
+                ),
+                
                 const Spacer(),
                 IconButton( 
                   onPressed: () async {
